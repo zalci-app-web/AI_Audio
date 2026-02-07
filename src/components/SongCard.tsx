@@ -15,9 +15,14 @@ interface Song {
 
 interface SongCardProps {
     song: Song
+    dict: {
+        buyNow: string
+        processing: string
+        error: string
+    }
 }
 
-export function SongCard({ song }: SongCardProps) {
+export function SongCard({ song, dict }: SongCardProps) {
     const [isPlaying, setIsPlaying] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -118,7 +123,7 @@ export function SongCard({ song }: SongCardProps) {
                     className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <ShoppingCart size={16} />
-                    {isLoading ? 'Processing...' : 'Buy Now'}
+                    {isLoading ? dict.processing : dict.buyNow}
                 </button>
             </div>
 
