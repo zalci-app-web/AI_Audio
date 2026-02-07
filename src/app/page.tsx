@@ -5,17 +5,50 @@ import { Footer } from '@/components/layout/footer'
 import { Hero } from '@/components/features/hero'
 import { getDictionary } from '@/lib/i18n'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
-  const supabase = await createClient()
-  const { data: songs } = await supabase
-    .from('songs')
-    .select('*')
-    .order('created_at', { ascending: false })
+  let songs = null
+  let error = null
+
+  try {
+    const supabase = await createClient()
+    const response = await supabase
+      .from('songs')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(4) // Top page only shows latest 4
+
+    songs = response.data
+
+    // Only set error if there's an actual error (will be shown in UI)
+    if (response.error) {
+      error = response.error
+    }
+  } catch (e) {
+    console.error('Unexpected Error:', e)
+    error = e as any
+  }
 
   const dict = await getDictionary()
 
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100">
+        <Header dict={dict.header} />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-xl text-red-400 mb-2">Error Loading Songs</h2>
+            <p className="text-gray-400 text-sm">{error.message || 'Unknown error occurred'}</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100">
+    <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100 font-sans">
       <Header dict={dict.header} />
 
       <main className="flex-1">
@@ -32,13 +65,17 @@ export default async function Home() {
           </div>
 
           {!songs?.length ? (
-            <div className="flex h-64 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+            <div className="flex h-64 items-center justify-center rounded-2xl border border-white/10 bg-zinc-900/50">
               <p className="text-gray-400">{dict.empty}</p>
             </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {songs.map((song) => (
-                <SongCard key={song.id} song={song} dict={dict.card} />
+                <SongCard
+                  key={song.id}
+                  song={song}
+                  dict={{ ...dict.card, purchaseModal: dict.purchaseModal }}
+                />
               ))}
             </div>
           )}
