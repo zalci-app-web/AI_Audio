@@ -2,10 +2,19 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
 import { Music } from 'lucide-react'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { dictionaries } from '@/lib/i18n'
 
-export async function Header() {
+interface HeaderProps {
+    dict: typeof dictionaries.en.header
+}
+
+export async function Header({ dict }: HeaderProps) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
+
+    // Fallback if dict is not provided (though page.tsx should pass it)
+    const t = dict || dictionaries.en.header
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -14,18 +23,18 @@ export async function Header() {
                     <Link href="/" className="mr-6 flex items-center space-x-2">
                         <Music className="h-6 w-6" />
                         <span className="hidden font-bold sm:inline-block">
-                            Zalci Audio
+                            {t.title}
                         </span>
                     </Link>
                     <nav className="flex items-center space-x-6 text-sm font-medium">
                         <Link href="/products" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                            Sounds
+                            {t.sounds}
                         </Link>
                         <Link href="/pricing" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                            Pricing
+                            {t.pricing}
                         </Link>
                         <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                            About
+                            {t.about}
                         </Link>
                     </nav>
                 </div>
@@ -33,22 +42,23 @@ export async function Header() {
                     <div className="w-full flex-1 md:w-auto md:flex-none">
                         {/* Search Placeholder */}
                     </div>
-                    <nav className="flex items-center space-x-2">
+                    <nav className="flex items-center space-x-4">
+                        <LanguageSwitcher />
                         {user ? (
                             <form action="/auth/signout" method="post">
                                 <Button variant="ghost" size="sm">
-                                    Sign Out
+                                    {t.signOut}
                                 </Button>
                             </form>
                         ) : (
                             <>
                                 <Link href="/login">
                                     <Button variant="ghost" size="sm">
-                                        Login
+                                        {t.login}
                                     </Button>
                                 </Link>
                                 <Link href="/login">
-                                    <Button size="sm">Get Started</Button>
+                                    <Button size="sm">{t.getStarted}</Button>
                                 </Link>
                             </>
                         )}

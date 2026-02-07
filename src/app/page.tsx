@@ -16,10 +16,10 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100">
-      <Header />
+      <Header dict={dict.header} />
 
       <main className="flex-1">
-        <Hero />
+        <Hero dict={dict.hero} />
 
         <section className="container mx-auto px-4 py-16">
           <div className="mb-12 text-center">
