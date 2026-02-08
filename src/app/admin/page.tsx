@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AddSongForm } from '@/components/admin/AddSongForm'
+import { DeleteSongButton } from '@/components/admin/DeleteSongButton'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
@@ -83,6 +84,7 @@ export default async function AdminPage() {
                                                     )}
                                                 </div>
                                             </div>
+                                            <DeleteSongButton songId={song.id} songTitle={song.title} />
                                         </div>
                                     </div>
                                 ))}

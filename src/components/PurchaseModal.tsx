@@ -85,7 +85,6 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    priceId: song.stripe_price_id,
                     songId: song.id,
                 }),
             })
@@ -93,8 +92,8 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
             const data = await response.json()
 
             if (!response.ok) {
-                // サーバーからのエラーメッセージを表示
-                throw new Error(data.error || 'Checkout failed')
+                const errorData = data
+                throw new Error(errorData.error || 'Checkout failed')
             }
 
             if (data.url) {

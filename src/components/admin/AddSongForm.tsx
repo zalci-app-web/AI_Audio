@@ -102,7 +102,10 @@ export function AddSongForm() {
                 upsert: true
             })
 
-        if (error) throw error
+        if (error) {
+            console.error('Storage upload error:', error)
+            throw new Error(`Storage upload failed: ${error.message}`)
+        }
 
         const { data: { publicUrl } } = supabase.storage
             .from('songs')
@@ -158,7 +161,11 @@ export function AddSongForm() {
                 }),
             })
 
-            if (!response.ok) throw new Error('Failed to add song')
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+                console.error('API Error:', errorData)
+                throw new Error(`Failed to add song: ${errorData.error || response.statusText}`)
+            }
 
             setUploadProgress('完了しました！')
 

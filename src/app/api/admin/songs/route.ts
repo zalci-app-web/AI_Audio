@@ -71,3 +71,50 @@ export async function POST(req: NextRequest) {
         )
     }
 }
+
+export async function DELETE(req: NextRequest) {
+    try {
+        const supabase = await createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Unauthorized' },
+                { status: 401 }
+            )
+        }
+
+        const { searchParams } = new URL(req.url)
+        const songId = searchParams.get('id')
+
+        if (!songId) {
+            return NextResponse.json(
+                { error: 'Song ID is required' },
+                { status: 400 }
+            )
+        }
+
+        // Delete song
+        const { error } = await supabase
+            .from('songs')
+            .delete()
+            .eq('id', songId)
+
+        if (error) {
+            console.error('Database error:', error)
+            return NextResponse.json(
+                { error: 'Failed to delete song' },
+                { status: 500 }
+            )
+        }
+
+        return NextResponse.json({ success: true })
+    } catch (error) {
+        console.error('API error:', error)
+        return NextResponse.json(
+            { error: 'Internal server error' },
+            { status: 500 }
+        )
+    }
+}
+
