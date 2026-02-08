@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { X, Play, Pause, CreditCard, Check } from 'lucide-react'
+import { X, Play, Pause, CreditCard } from 'lucide-react'
 import Image from 'next/image'
 
 interface Song {
@@ -44,22 +44,13 @@ interface PurchaseModalProps {
 
 export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProps) {
     const [isPlaying, setIsPlaying] = useState(false)
-    const [selectedOptions, setSelectedOptions] = useState<Set<string>>(new Set())
     const [isLoading, setIsLoading] = useState(false)
     const audioRef = useRef<HTMLAudioElement | null>(null)
-
-    const OPTIONS = [
-        { id: 'wav', label: dict.options.wav, price: 300, isAvailable: song.has_wav || false },
-        { id: 'loop', label: dict.options.loop, price: 300, isAvailable: song.has_loop || false },
-        { id: 'high-res', label: dict.options.highRes, price: 500, isAvailable: song.has_high_res || false },
-        { id: 'midi', label: dict.options.midi, price: 200, isAvailable: song.has_midi || false },
-    ]
 
     // Reset state when modal opens
     useEffect(() => {
         if (isOpen) {
             setIsPlaying(false)
-            setSelectedOptions(new Set())
             if (audioRef.current) {
                 audioRef.current.currentTime = 0;
                 audioRef.current.pause();
@@ -68,20 +59,6 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
     }, [isOpen])
 
     if (!isOpen) return null
-
-    const toggleOption = (optionId: string) => {
-        // Check if option is available
-        const option = OPTIONS.find(o => o.id === optionId)
-        if (!option?.isAvailable) return
-
-        const newOptions = new Set(selectedOptions)
-        if (newOptions.has(optionId)) {
-            newOptions.delete(optionId)
-        } else {
-            newOptions.add(optionId)
-        }
-        setSelectedOptions(newOptions)
-    }
 
     const togglePlay = (e: React.MouseEvent) => {
         e.stopPropagation()
@@ -99,11 +76,6 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
         setIsPlaying(false)
     }
 
-    const totalPrice = song.price + Array.from(selectedOptions).reduce((acc, id) => {
-        const option = OPTIONS.find(o => o.id === id)
-        return acc + (option?.price || 0)
-    }, 0)
-
     const handleCheckout = async () => {
         try {
             setIsLoading(true)
@@ -115,7 +87,6 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
                 body: JSON.stringify({
                     priceId: song.stripe_price_id,
                     songId: song.id,
-                    selectedOptions: Array.from(selectedOptions),
                 }),
             })
 
@@ -196,47 +167,14 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
                     </div>
                 </div>
 
-                {/* Options Section */}
+                {/* Product Info Section */}
                 <div className="mb-6 space-y-3">
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">{dict.purchaseOptions}</h3>
-
-                    <div className="space-y-2">
-                        {OPTIONS.map(option => (
-                            <label
-                                key={option.id}
-                                className={`flex items-center justify-between rounded-lg border p-3 transition-all ${!option.isAvailable
-                                    ? 'border-white/5 bg-zinc-800/50 opacity-50 cursor-not-allowed'
-                                    : selectedOptions.has(option.id)
-                                        ? 'border-blue-500/50 bg-blue-500/10 cursor-pointer'
-                                        : 'border-white/5 bg-white/5 hover:border-white/10 hover:bg-white/10 cursor-pointer'
-                                    }`}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className={`flex h-5 w-5 items-center justify-center rounded border ${!option.isAvailable
-                                        ? 'border-gray-600 bg-gray-700'
-                                        : selectedOptions.has(option.id)
-                                            ? 'border-blue-500 bg-blue-500 text-white'
-                                            : 'border-gray-500 bg-transparent'
-                                        }`}>
-                                        {selectedOptions.has(option.id) && <Check size={12} />}
-                                    </div>
-                                    <span className={`text-sm ${!option.isAvailable ? 'text-gray-500' : 'text-gray-200'}`}>
-                                        {option.label}
-                                        {!option.isAvailable && <span className="ml-2 text-xs">(利用不可)</span>}
-                                    </span>
-                                </div>
-                                <span className={`text-sm ${!option.isAvailable ? 'text-gray-600' : 'text-gray-400'}`}>
-                                    +¥{option.price}
-                                </span>
-                                <input
-                                    type="checkbox"
-                                    className="hidden"
-                                    checked={selectedOptions.has(option.id)}
-                                    onChange={() => toggleOption(option.id)}
-                                    disabled={!option.isAvailable}
-                                />
-                            </label>
-                        ))}
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">内容</h3>
+                    <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+                        <div className="flex items-center justify-between">
+                            <span className="text-gray-200">MP3 音源（フル版）</span>
+                            <span className="text-blue-400 font-semibold">✓ 含まれます</span>
+                        </div>
                     </div>
                 </div>
 
@@ -244,7 +182,7 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
                 <div className="border-t border-white/10 pt-4">
                     <div className="mb-4 flex items-center justify-between">
                         <span className="text-gray-400">{dict.totalAmount}</span>
-                        <span className="text-2xl font-bold text-white">¥{totalPrice.toLocaleString()}</span>
+                        <span className="text-2xl font-bold text-white">¥{song.price.toLocaleString()}</span>
                     </div>
 
                     <button

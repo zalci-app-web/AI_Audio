@@ -2,26 +2,9 @@ import { NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
 
-// オプション料金のマッピング
-const OPTION_PRICES: Record<string, number> = {
-    wav: 300,
-    loop: 300,
-    'high-res': 500,
-    midi: 200,
-}
-
-// オプション名のマッピング（日本語表示用）
-const OPTION_LABELS: Record<string, string> = {
-    wav: 'WAV Format',
-    loop: 'Loop Version',
-    'high-res': 'High-Res Audio',
-    midi: 'MIDI Data',
-}
-
 interface CheckoutRequest {
     priceId: string
     songId: string
-    selectedOptions?: string[]
 }
 
 export async function POST(request: Request) {
@@ -38,7 +21,7 @@ export async function POST(request: Request) {
             )
         }
 
-        const { priceId, songId, selectedOptions = [] } = (await request.json()) as CheckoutRequest
+        const { priceId, songId } = (await request.json()) as CheckoutRequest
 
         if (!priceId) {
             return NextResponse.json(
@@ -62,10 +45,10 @@ export async function POST(request: Request) {
             )
         }
 
-        // 楽曲情報の取得
+        // 楽曲情報の取得（タイトル確認用）
         const { data: song, error: songError } = await supabase
             .from('songs')
-            .select('*')
+            .select('title')
             .eq('id', songId)
             .single()
 
@@ -77,66 +60,27 @@ export async function POST(request: Request) {
             )
         }
 
-        // line_itemsの構築
-        const lineItems: any[] = [
-            {
-                price_data: {
-                    currency: 'jpy',
-                    product_data: {
-                        name: song.title,
-                        description: `${song.title} - MP3 音源`,
-                    },
-                    unit_amount: song.price,
-                },
-                quantity: 1,
-            },
-        ]
-
-        // 追加オプションをline_itemsに追加
-        const validOptions: string[] = []
-        if (selectedOptions && selectedOptions.length > 0) {
-            for (const option of selectedOptions) {
-                // オプションが有効かチェック
-                const dbFieldName = `has_${option.replace('-', '_')}`
-                const isAvailable = song[dbFieldName]
-
-                if (!isAvailable) {
-                    console.warn(`[OPTION_NOT_AVAILABLE] Option "${option}" not available for song ${songId}`)
-                    continue
-                }
-
-                if (!OPTION_PRICES[option]) {
-                    console.warn(`[UNKNOWN_OPTION] Unknown option "${option}"`)
-                    continue
-                }
-
-                validOptions.push(option)
-
-                lineItems.push({
-                    price_data: {
-                        currency: 'jpy',
-                        product_data: {
-                            name: `${song.title} - ${OPTION_LABELS[option]}`,
-                            description: `追加オプション: ${OPTION_LABELS[option]}`,
-                        },
-                        unit_amount: OPTION_PRICES[option],
-                    },
-                    quantity: 1,
-                })
-            }
+        // サイトURLの補正（https://必須）
+        let siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        if (!siteUrl.startsWith('http://') && !siteUrl.startsWith('https://')) {
+            siteUrl = `https://${siteUrl}`
         }
 
-        // Stripe Checkout Sessionの作成
+        // Stripe Checkout Sessionの作成（シンプルバージョン）
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
-            line_items: lineItems,
+            line_items: [
+                {
+                    price: priceId, // Stripeで作成したPrice IDをそのまま使用
+                    quantity: 1,
+                },
+            ],
             mode: 'payment',
-            success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/library?purchase=success`,
-            cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/?purchase=cancelled`,
+            success_url: `${siteUrl}/library?purchase=success`,
+            cancel_url: `${siteUrl}/?purchase=cancelled`,
             metadata: {
                 userId: user.id,
-                songId: song.id,
-                selectedOptions: validOptions.join(','),
+                songId: songId,
             },
         })
 
