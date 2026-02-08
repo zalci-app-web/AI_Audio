@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 // Initialize Stripe lazily
 const getStripe = () => {
@@ -52,8 +52,8 @@ export async function POST(req: NextRequest) {
                 )
             }
 
-            // Create a Supabase client with service role to bypass RLS
-            const supabase = await createClient()
+            // Create a Supabase admin client to bypass RLS
+            const supabase = createAdminClient()
 
             // Record the purchase
             const { error } = await supabase.from('purchases').insert({
