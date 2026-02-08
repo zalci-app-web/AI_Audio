@@ -107,7 +107,6 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
     const handleCheckout = async () => {
         try {
             setIsLoading(true)
-            // Note: In a real app, we would send selectedOptions to the backend
             const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: {
@@ -115,17 +114,27 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
                 },
                 body: JSON.stringify({
                     priceId: song.stripe_price_id,
-                    // options: Array.from(selectedOptions) // Backend logic needed
+                    songId: song.id,
+                    selectedOptions: Array.from(selectedOptions),
                 }),
             })
 
-            if (!response.ok) throw new Error('Checkout failed')
+            const data = await response.json()
 
-            const { url } = await response.json()
-            window.location.href = url
+            if (!response.ok) {
+                // サーバーからのエラーメッセージを表示
+                throw new Error(data.error || 'Checkout failed')
+            }
+
+            if (data.url) {
+                window.location.href = data.url
+            } else {
+                throw new Error('No checkout URL received')
+            }
         } catch (error) {
             console.error('Checkout error:', error)
-            alert('Checkout failed. Please try again.')
+            const errorMessage = error instanceof Error ? error.message : '決済処理中にエラーが発生しました。'
+            alert(errorMessage)
         } finally {
             setIsLoading(false)
         }
