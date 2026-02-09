@@ -63,12 +63,21 @@ export default async function LegalPage() {
 
                     <section className="border-b border-white/10 pb-6">
                         <h2 className="text-lg font-semibold text-white mb-2">商品の引渡時期</h2>
-                        <p>決済完了後、直ちにご利用いただけます。</p>
+                        <p>決済完了後、ウェブサイト上のマイライブラリより即時にダウンロード、または再生してご利用いただけます。</p>
                     </section>
 
                     <section>
                         <h2 className="text-lg font-semibold text-white mb-2">返品・キャンセルについて</h2>
-                        <p>デジタルコンテンツの特性上、購入後の返品・キャンセルはお受けできません。商品に欠陥がある場合は、確認の上対応いたしますのでお問い合わせください。</p>
+                        <div className="space-y-4">
+                            <p>
+                                <strong>＜お客様都合の返品・交換＞</strong><br />
+                                デジタルコンテンツという商品の性質上、購入確定後のお客様都合による返品・返金・キャンセルはお受けできません。
+                            </p>
+                            <p>
+                                <strong>＜不良品・不具合について＞</strong><br />
+                                万が一、ダウンロードしたファイルが破損している、または再生できない等の不具合がある場合は、お問い合わせ窓口（zalciapp@gmail.com）までご連絡ください。内容を確認の上、正常なファイルへの交換または返金対応をさせていただきます。
+                            </p>
+                        </div>
                     </section>
                 </div>
             </main>
