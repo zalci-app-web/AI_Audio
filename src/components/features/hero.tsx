@@ -3,11 +3,14 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import { dictionaries } from '@/lib/i18n'
 
+import { User } from '@supabase/supabase-js'
+
 interface HeroProps {
     dict: typeof dictionaries.en.hero
+    user?: User | null
 }
 
-export function Hero({ dict }: HeroProps) {
+export function Hero({ dict, user }: HeroProps) {
     // Fallback
     const t = dict || dictionaries.en.hero
 
@@ -15,7 +18,7 @@ export function Hero({ dict }: HeroProps) {
         <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
             <div className="container mx-auto flex max-w-[64rem] flex-col items-center gap-4 text-center">
                 <Link
-                    href="https://twitter.com"
+                    href="https://x.com"
                     className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
                     target="_blank"
                 >
@@ -29,12 +32,18 @@ export function Hero({ dict }: HeroProps) {
                     {t.description}
                 </p>
                 <div className="space-x-4">
-                    <Link href="/login">
-                        <Button size="lg" className="h-11 px-8 gap-2">
-                            {t.getStarted} <ArrowRight className="h-4 w-4" />
+                    {user ? (
+                        <Button size="lg" className="h-11 px-8 gap-2" disabled>
+                            {dict.login?.loggedIn || 'ログイン済み'}
                         </Button>
-                    </Link>
-                    <Link href="/products">
+                    ) : (
+                        <Link href="/login">
+                            <Button size="lg" className="h-11 px-8 gap-2">
+                                {t.getStarted} <ArrowRight className="h-4 w-4" />
+                            </Button>
+                        </Link>
+                    )}
+                    <Link href="/library">
                         <Button variant="outline" size="lg" className="h-11 px-8">
                             {t.browseLibrary}
                         </Button>

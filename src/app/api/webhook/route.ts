@@ -14,6 +14,7 @@ const getStripe = () => {
 
 export async function POST(req: NextRequest) {
     try {
+        console.log('[Webhook] Starting webhook handler')
         const body = await req.text()
         const signature = req.headers.get('stripe-signature')!
 
@@ -24,13 +25,14 @@ export async function POST(req: NextRequest) {
             const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
             if (!webhookSecret) {
-                console.error('STRIPE_WEBHOOK_SECRET is not set')
+                console.error('[Webhook] STRIPE_WEBHOOK_SECRET is not set')
                 return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
             }
 
             event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+            console.log(`[Webhook] Event constructed: ${event.type}`)
         } catch (err) {
-            console.error('Webhook signature verification failed:', err)
+            console.error('[Webhook] Webhook signature verification failed:', err)
             return NextResponse.json(
                 { error: 'Invalid signature' },
                 { status: 400 }
@@ -40,12 +42,19 @@ export async function POST(req: NextRequest) {
         // Handle the checkout.session.completed event
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object as Stripe.Checkout.Session
+            console.log('[Webhook] Processing checkout.session.completed', {
+                sessionId: session.id,
+                amount: session.amount_total,
+                currency: session.currency
+            })
 
             const userId = session.metadata?.userId
             const songId = session.metadata?.songId
 
+            console.log('[Webhook] Metadata:', { userId, songId })
+
             if (!userId || !songId) {
-                console.error('Missing metadata in session:', session.id)
+                console.error('[Webhook] Missing metadata in session:', session.id)
                 return NextResponse.json(
                     { error: 'Missing metadata' },
                     { status: 400 }
@@ -56,28 +65,31 @@ export async function POST(req: NextRequest) {
             const supabase = createAdminClient()
 
             // Record the purchase
-            const { error } = await supabase.from('purchases').insert({
+            console.log('[Webhook] Attempting to insert purchase record...')
+            const { data, error } = await supabase.from('purchases').insert({
                 user_id: userId,
                 song_id: songId,
                 stripe_session_id: session.id,
                 amount: session.amount_total,
                 currency: session.currency,
-            })
+            }).select()
 
             if (error) {
-                console.error('Failed to record purchase:', error)
+                console.error('[Webhook] Failed to record purchase:', error)
                 return NextResponse.json(
-                    { error: 'Failed to record purchase' },
+                    { error: 'Failed to record purchase', details: error },
                     { status: 500 }
                 )
             }
 
-            console.log('Purchase recorded successfully:', { userId, songId })
+            console.log('[Webhook] Purchase recorded successfully:', { userId, songId, record: data })
+        } else {
+            console.log(`[Webhook] Unhandled event type: ${event.type}`)
         }
 
         return NextResponse.json({ received: true })
     } catch (error) {
-        console.error('Webhook error:', error)
+        console.error('[Webhook] Webhook error:', error)
         return NextResponse.json(
             { error: 'Webhook handler failed' },
             { status: 500 }

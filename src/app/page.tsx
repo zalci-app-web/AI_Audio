@@ -10,9 +10,9 @@ export const dynamic = 'force-dynamic'
 export default async function Home() {
   let songs = null
   let error = null
+  const supabase = await createClient()
 
   try {
-    const supabase = await createClient()
     const response = await supabase
       .from('songs')
       .select('*')
@@ -47,12 +47,14 @@ export default async function Home() {
     )
   }
 
+  const { data: { user } } = await supabase.auth.getUser()
+
   return (
     <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100 font-sans">
       <Header dict={dict.header} />
 
       <main className="flex-1">
-        <Hero dict={dict.hero} />
+        <Hero dict={dict.hero} user={user} />
 
         <section className="container mx-auto px-4 py-16">
           <div className="mb-12 text-center">

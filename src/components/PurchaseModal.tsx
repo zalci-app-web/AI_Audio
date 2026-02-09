@@ -146,7 +146,9 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
                 {/* Preview Section */}
                 <div className="mb-6 rounded-xl bg-black/20 p-4 border border-white/5">
                     <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-300">{dict.preview}</span>
+                        <span className="text-sm font-medium text-gray-300 leading-tight">
+                            {dict.preview.split('(')[0]}<br /><span className="text-xs text-gray-400">({dict.preview.split('(')[1]}</span>
+                        </span>
                         <button
                             onClick={togglePlay}
                             className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold text-white hover:bg-white/20 transition-colors"
