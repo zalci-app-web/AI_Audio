@@ -22,17 +22,17 @@ export default async function LegalPage() {
 
                     <section className="border-b border-white/10 pb-6">
                         <h2 className="text-lg font-semibold text-white mb-2">運営統括責任者</h2>
-                        <p>上原 智樹</p>
+                        <p>山﨑 智希</p>
                     </section>
 
                     <section className="border-b border-white/10 pb-6">
                         <h2 className="text-lg font-semibold text-white mb-2">所在地</h2>
-                        <p>[ここにバーチャルオフィスの住所を入力]</p>
+                        <p>〒106-0032 東京都港区六本木3丁目16番12号 六本木KSビル5F 六本木オフィス</p>
                     </section>
 
                     <section className="border-b border-white/10 pb-6">
                         <h2 className="text-lg font-semibold text-white mb-2">電話番号</h2>
-                        <p>[ここに電話番号を入力]</p>
+                        <p>080-6183-3443</p>
                         <p className="text-sm text-gray-500 mt-1">※お電話でのサポートは受け付けておりません。お問い合わせはメールまたはフォームよりお願いいたします。</p>
                     </section>
 
