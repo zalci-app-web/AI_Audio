@@ -38,7 +38,7 @@ export default async function LegalPage() {
 
                     <section className="border-b border-white/10 pb-6">
                         <h2 className="text-lg font-semibold text-white mb-2">メールアドレス</h2>
-                        <p>support@zalciaudio.com</p>
+                        <p>zalciapp@gmail.com</p>
                     </section>
 
                     <section className="border-b border-white/10 pb-6">
