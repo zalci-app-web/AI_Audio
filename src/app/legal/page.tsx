@@ -27,12 +27,12 @@ export default async function LegalPage() {
 
                     <section className="border-b border-white/10 pb-6">
                         <h2 className="text-lg font-semibold text-white mb-2">所在地</h2>
-                        <p>〒106-0032 東京都港区六本木3丁目16番12号 六本木KSビル5F 六本木オフィス</p>
+                        <p>請求があったら遅滞なく開示します（上記メールアドレスまでご請求いただければ速やかに開示いたします）</p>
                     </section>
 
                     <section className="border-b border-white/10 pb-6">
                         <h2 className="text-lg font-semibold text-white mb-2">電話番号</h2>
-                        <p>080-6183-3443</p>
+                        <p>請求があったら遅滞なく開示します（上記メールアドレスまでご請求いただければ速やかに開示いたします）</p>
                         <p className="text-sm text-gray-500 mt-1">※お電話でのサポートは受け付けておりません。お問い合わせはメールまたはフォームよりお願いいたします。</p>
                     </section>
 
