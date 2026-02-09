@@ -13,26 +13,61 @@ const getStripe = () => {
 }
 
 export async function POST(req: NextRequest) {
+    // Log immediately when webhook is called
+    console.log('[Webhook] ===== POST request received =====')
+    console.log('[Webhook] Timestamp:', new Date().toISOString())
+
     try {
-        console.log('[Webhook] Starting webhook handler')
+        // Check environment variables FIRST before doing anything
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+        const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+
+        console.log('[Webhook] Environment check:', {
+            hasWebhookSecret: !!webhookSecret,
+            hasServiceRoleKey: !!serviceRoleKey,
+            hasStripeSecretKey: !!stripeSecretKey,
+        })
+
+        if (!stripeSecretKey) {
+            console.error('[Webhook] CRITICAL: STRIPE_SECRET_KEY not set')
+            return NextResponse.json({ error: 'Configuration error' }, { status: 500 })
+        }
+
+        if (!webhookSecret) {
+            console.error('[Webhook] CRITICAL: STRIPE_WEBHOOK_SECRET not set')
+            return NextResponse.json({ error: 'Configuration error' }, { status: 500 })
+        }
+
+        if (!serviceRoleKey) {
+            console.error('[Webhook] CRITICAL: SUPABASE_SERVICE_ROLE_KEY not set')
+            return NextResponse.json({ error: 'Configuration error' }, { status: 500 })
+        }
+
+        console.log('[Webhook] Reading request body...')
         const body = await req.text()
-        const signature = req.headers.get('stripe-signature')!
+        console.log('[Webhook] Body length:', body.length)
+
+        const signature = req.headers.get('stripe-signature')
+        console.log('[Webhook] Signature present:', !!signature)
+
+        if (!signature) {
+            console.error('[Webhook] No Stripe signature found in headers')
+            return NextResponse.json({ error: 'No signature' }, { status: 400 })
+        }
 
         let event: Stripe.Event
 
         try {
+            console.log('[Webhook] Constructing Stripe event...')
             const stripe = getStripe()
-            const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
-
-            if (!webhookSecret) {
-                console.error('[Webhook] STRIPE_WEBHOOK_SECRET is not set')
-                return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
-            }
-
             event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-            console.log(`[Webhook] Event constructed: ${event.type}`)
+            console.log('[Webhook] Event constructed successfully:', event.type)
+            console.log('[Webhook] Event ID:', event.id)
         } catch (err) {
-            console.error('[Webhook] Webhook signature verification failed:', err)
+            const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+            console.error('[Webhook] Webhook signature verification failed:', errorMessage)
+            console.error('[Webhook] Error details:', err)
             return NextResponse.json(
                 { error: 'Invalid signature' },
                 { status: 400 }
@@ -41,55 +76,86 @@ export async function POST(req: NextRequest) {
 
         // Handle the checkout.session.completed event
         if (event.type === 'checkout.session.completed') {
+            console.log('[Webhook] Processing checkout.session.completed event')
             const session = event.data.object as Stripe.Checkout.Session
-            console.log('[Webhook] Processing checkout.session.completed', {
+            console.log('[Webhook] Session details:', {
                 sessionId: session.id,
                 amount: session.amount_total,
-                currency: session.currency
+                currency: session.currency,
+                paymentStatus: session.payment_status
             })
 
             const userId = session.metadata?.userId
             const songId = session.metadata?.songId
 
-            console.log('[Webhook] Metadata:', { userId, songId })
+            console.log('[Webhook] Extracted metadata:', { userId, songId })
 
             if (!userId || !songId) {
-                console.error('[Webhook] Missing metadata in session:', session.id)
+                console.error('[Webhook] Missing required metadata in session')
+                console.error('[Webhook] Full metadata:', session.metadata)
+                // Return 200 to prevent Stripe from retrying
                 return NextResponse.json(
-                    { error: 'Missing metadata' },
-                    { status: 400 }
+                    { received: true, error: 'Missing metadata' },
+                    { status: 200 }
                 )
             }
 
             // Create a Supabase admin client to bypass RLS
-            const supabase = createAdminClient()
+            console.log('[Webhook] Creating Supabase admin client...')
+            try {
+                const supabase = createAdminClient()
+                console.log('[Webhook] Admin client created successfully')
 
-            // Record the purchase
-            console.log('[Webhook] Attempting to insert purchase record...')
-            const { data, error } = await supabase.from('purchases').insert({
-                user_id: userId,
-                song_id: songId,
-                stripe_session_id: session.id,
-                amount: session.amount_total,
-                currency: session.currency,
-            }).select()
+                // Record the purchase
+                console.log('[Webhook] Attempting to insert purchase record...')
+                const insertData = {
+                    user_id: userId,
+                    song_id: songId,
+                    stripe_session_id: session.id,
+                    amount: session.amount_total,
+                    currency: session.currency,
+                }
+                console.log('[Webhook] Insert data:', insertData)
 
-            if (error) {
-                console.error('[Webhook] Failed to record purchase:', error)
+                const { data, error } = await supabase
+                    .from('purchases')
+                    .insert(insertData)
+                    .select()
+
+                if (error) {
+                    console.error('[Webhook] Failed to insert purchase record')
+                    console.error('[Webhook] Supabase error code:', error.code)
+                    console.error('[Webhook] Supabase error message:', error.message)
+                    console.error('[Webhook] Full error:', JSON.stringify(error, null, 2))
+                    // Still return 200 to prevent Stripe from retrying
+                    return NextResponse.json(
+                        { received: true, error: 'DB insert failed' },
+                        { status: 200 }
+                    )
+                }
+
+                console.log('[Webhook] ✅ Purchase recorded successfully!')
+                console.log('[Webhook] Inserted record:', JSON.stringify(data, null, 2))
+            } catch (adminError) {
+                console.error('[Webhook] Error creating admin client or inserting:', adminError)
                 return NextResponse.json(
-                    { error: 'Failed to record purchase', details: error },
-                    { status: 500 }
+                    { received: true, error: 'Admin client error' },
+                    { status: 200 }
                 )
             }
-
-            console.log('[Webhook] Purchase recorded successfully:', { userId, songId, record: data })
         } else {
-            console.log(`[Webhook] Unhandled event type: ${event.type}`)
+            console.log('[Webhook] Received event type:', event.type)
+            console.log('[Webhook] Ignoring unhandled event type')
         }
 
+        console.log('[Webhook] ===== Webhook processing completed successfully =====')
         return NextResponse.json({ received: true })
     } catch (error) {
-        console.error('[Webhook] Webhook error:', error)
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        console.error('[Webhook] ❌ Unexpected error in webhook handler')
+        console.error('[Webhook] Error message:', errorMessage)
+        console.error('[Webhook] Error stack:', error instanceof Error ? error.stack : 'No stack')
+        console.error('[Webhook] Full error:', error)
         return NextResponse.json(
             { error: 'Webhook handler failed' },
             { status: 500 }
