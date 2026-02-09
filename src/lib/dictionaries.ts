@@ -8,6 +8,7 @@ export const dictionaries = {
             getStarted: 'Get Started',
             browseLibrary: 'Browse Library',
             twitterFollow: 'Follow along on X',
+            loggedIn: 'Logged In',
         },
         header: {
             title: 'Zalci Audio',
@@ -96,6 +97,7 @@ export const dictionaries = {
             getStarted: '始める',
             browseLibrary: 'ライブラリを見る',
             twitterFollow: 'Xでフォローする',
+            loggedIn: 'ログイン済み',
         },
         header: {
             title: 'Zalci Audio',

@@ -34,7 +34,7 @@ export function Hero({ dict, user }: HeroProps) {
                 <div className="space-x-4">
                     {user ? (
                         <Button size="lg" className="h-11 px-8 gap-2" disabled>
-                            {dict.login?.loggedIn || 'ログイン済み'}
+                            {t.loggedIn}
                         </Button>
                     ) : (
                         <Link href="/login">
