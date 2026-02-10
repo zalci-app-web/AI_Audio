@@ -52,6 +52,20 @@ export function MobileMenu({ dict, user }: MobileMenuProps) {
                     >
                         {dict.about}
                     </Link>
+                    <Link
+                        href="/terms"
+                        className="text-lg font-semibold hover:text-blue-400 transition-colors"
+                        onClick={() => setOpen(false)}
+                    >
+                        {dict.terms}
+                    </Link>
+                    <Link
+                        href="/legal"
+                        className="text-lg font-semibold hover:text-blue-400 transition-colors"
+                        onClick={() => setOpen(false)}
+                    >
+                        {dict.legal}
+                    </Link>
 
                     <div className="h-px bg-white/10 my-4" />
 

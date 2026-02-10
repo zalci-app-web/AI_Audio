@@ -51,8 +51,11 @@ export async function Header({ dict }: HeaderProps) {
                         <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60">
                             {t.about}
                         </Link>
+                        <Link href="/terms" className="transition-colors hover:text-foreground/80 text-foreground/60">
+                            {t.terms}
+                        </Link>
                         <Link href="/legal" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                            特定商取引法
+                            {t.legal}
                         </Link>
                     </nav>
                 </div>

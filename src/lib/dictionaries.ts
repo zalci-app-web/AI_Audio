@@ -15,6 +15,8 @@ export const dictionaries = {
             sounds: 'Sounds',
             pricing: 'Pricing',
             about: 'About',
+            terms: 'Terms of Service',
+            legal: 'Legal',
             login: 'Login',
             signOut: 'Sign Out',
             getStarted: 'Get Started',
@@ -99,6 +101,35 @@ export const dictionaries = {
             successDesc: 'We sent you a login link.',
             errorTitle: 'Authentication Error',
             loggedIn: 'Logged In',
+        },
+        terms: {
+            title: 'Terms of Service',
+            sections: [
+                {
+                    title: '1. Introduction',
+                    content: 'These Terms of Service govern your use of Zalci Audio. By accessing or using our service, you agree to be bound by these terms.'
+                },
+                {
+                    title: '2. License to Use',
+                    content: 'When you purchase an audio asset from Zalci Audio, you are granted a non-exclusive, royalty-free license to use the asset in your personal or commercial projects, including games, videos, and streams. You may not resell or redistribute the assets as standalone files.'
+                },
+                {
+                    title: '3. User Accounts',
+                    content: 'To access certain features, you may need to create an account. You are responsible for maintaining the confidentiality of your account information.'
+                },
+                {
+                    title: '4. Purchases and Refunds',
+                    content: 'All sales are final. Due to the digital nature of our products, we do not generally offer refunds unless the file is defective.'
+                },
+                {
+                    title: '5. Prohibited Uses',
+                    content: 'You may not use our assets for any illegal purpose or in a way that violates the rights of others.'
+                },
+                {
+                    title: '6. Changes to Terms',
+                    content: 'We reserve the right to modify these terms at any time. Continued use of the service constitutes acceptance of the new terms.'
+                }
+            ]
         }
     },
     ja: {
@@ -115,6 +146,8 @@ export const dictionaries = {
             sounds: 'サウンド',
             pricing: '料金',
             about: '概要',
+            terms: '利用規約',
+            legal: '特定商取引法',
             login: 'ログイン',
             signOut: 'ログアウト',
             getStarted: '始める',
@@ -199,6 +232,35 @@ export const dictionaries = {
             successDesc: 'ログインリンクを送信しました。',
             errorTitle: '認証エラー',
             loggedIn: 'ログイン済み',
+        },
+        terms: {
+            title: '利用規約',
+            sections: [
+                {
+                    title: '第1条（はじめに）',
+                    content: '本利用規約は、Zalci Audioの利用に関する条件を定めるものです。本サービスを利用することにより、本規約に同意したものとみなされます。'
+                },
+                {
+                    title: '第2条（ライセンス）',
+                    content: 'Zalci Audioで購入されたオーディオ素材については、ゲーム、動画、配信を含む個人的または商用プロジェクトにおいて、非独占的かつロイヤリティフリーで使用する権利が付与されます。ただし、素材そのものを単体で再販売・再配布することは禁止されています。'
+                },
+                {
+                    title: '第3条（ユーザーアカウント）',
+                    content: '一部の機能を利用するためにはアカウントの作成が必要です。ユーザーは自身のアカウント情報の管理について責任を負うものとします。'
+                },
+                {
+                    title: '第4条（購入と返金）',
+                    content: 'デジタルコンテンツという商品の性質上、原則として購入後のキャンセル・返金はお受けできません。ただし、ファイルに欠陥がある場合はこの限りではありません。'
+                },
+                {
+                    title: '第5条（禁止事項）',
+                    content: '違法な目的での使用、または他者の権利を侵害する方法での使用は禁止されています。'
+                },
+                {
+                    title: '第6条（規約の変更）',
+                    content: '当社は必要に応じて本規約を変更することがあります。変更後もサービスを継続して利用された場合、変更後の規約に同意したものとみなします。'
+                }
+            ]
         }
     },
 }
