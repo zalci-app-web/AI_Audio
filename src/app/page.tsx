@@ -49,6 +49,18 @@ export default async function Home() {
 
   const { data: { user } } = await supabase.auth.getUser()
 
+  let purchasedSongIds = new Set<string>()
+  if (user) {
+    const { data: purchases } = await supabase
+      .from('purchases')
+      .select('song_id')
+      .eq('user_id', user.id)
+
+    if (purchases) {
+      purchases.forEach(p => purchasedSongIds.add(p.song_id))
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100 font-sans">
       <Header dict={dict.header} />
@@ -77,6 +89,8 @@ export default async function Home() {
                   key={song.id}
                   song={song}
                   dict={{ ...dict.card, purchaseModal: dict.purchaseModal }}
+                  user={user}
+                  isPurchased={purchasedSongIds.has(song.id)}
                 />
               ))}
             </div>

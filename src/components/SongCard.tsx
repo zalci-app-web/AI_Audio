@@ -26,13 +26,17 @@ interface SongCardProps {
         error: string
         purchaseModal: any // Using any for simplicity here to avoid duplicating the type, or we can export it
     }
+    user?: any
+    isPurchased?: boolean
 }
 
-export function SongCard({ song, dict }: SongCardProps) {
+export function SongCard({ song, dict, user, isPurchased = false }: SongCardProps) {
     const [isPlaying, setIsPlaying] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const audioRef = useRef<HTMLAudioElement | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const useRouter = (require('next/navigation').useRouter) // Quick inline for client component
+    const router = useRouter()
 
     const togglePlay = (e?: React.MouseEvent) => {
         e?.stopPropagation()
@@ -51,16 +55,60 @@ export function SongCard({ song, dict }: SongCardProps) {
     }
 
     // Now opens modal instead of direct checkout
-    const handleBuyClick = (e: React.MouseEvent) => {
+    const handleBuyClick = async (e: React.MouseEvent) => {
         e.stopPropagation()
-        setIsModalOpen(true)
+        if (!user) {
+            router.push('/login')
+            return
+        }
+
+        if (isPurchased) {
+            router.push('/library')
+            return
+        }
+
+        // Free Campaign Logic
+        try {
+            setIsLoading(true)
+            const response = await fetch('/api/free-claim', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ songId: song.id }),
+            })
+
+            if (!response.ok) {
+                throw new Error('Failed to claim')
+            }
+
+            // Refresh to show updated status
+            router.refresh()
+            router.push('/library')
+        } catch (error) {
+            console.error('Claim error:', error)
+            alert('An error occurred. Please try again.')
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
         <>
             <div
                 className="group relative overflow-hidden rounded-xl border border-white/10 bg-zinc-900 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] cursor-pointer"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                    if (!user) {
+                        router.push('/login')
+                        return
+                    }
+                    if (isPurchased) {
+                        router.push('/library')
+                        return
+                    }
+                    // For free campaign, clicking card also triggers buy/download
+                    handleBuyClick({ stopPropagation: () => { } } as React.MouseEvent)
+                }}
             >
                 {/* Glow Effect */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 transition duration-500 group-hover:opacity-20 blur-xl" />
@@ -99,16 +147,30 @@ export function SongCard({ song, dict }: SongCardProps) {
                 <div className="relative mt-4 space-y-3">
                     <div>
                         <h3 className="text-lg font-bold text-white truncate">{song.title}</h3>
-                        <p className="text-sm text-gray-400">¥{song.price.toLocaleString()}</p>
+                        <div className="flex items-center gap-2">
+                            <p className="text-sm text-gray-400 line-through">¥{song.price.toLocaleString()}</p>
+                            <span className="text-sm font-bold text-green-400">FREE</span>
+                        </div>
                     </div>
 
                     <button
                         onClick={handleBuyClick}
                         disabled={isLoading}
-                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed ${isPurchased
+                                ? 'bg-zinc-700'
+                                : 'bg-gradient-to-r from-green-500 to-emerald-600'
+                            }`}
                     >
-                        <ShoppingCart size={16} />
-                        {isLoading ? dict.processing : dict.buyNow}
+                        {isLoading ? (
+                            dict.processing
+                        ) : isPurchased ? (
+                            'In Library'
+                        ) : (
+                            <>
+                                <ShoppingCart size={16} />
+                                Free Download
+                            </>
+                        )}
                     </button>
                 </div>
 
@@ -120,13 +182,6 @@ export function SongCard({ song, dict }: SongCardProps) {
                     className="hidden"
                 />
             </div>
-
-            <PurchaseModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                song={song}
-                dict={dict.purchaseModal}
-            />
         </>
     )
 }
