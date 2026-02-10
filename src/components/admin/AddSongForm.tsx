@@ -22,7 +22,7 @@ export function AddSongForm() {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        price: '',
+        price: '200',
         image_url: '',
         mp3_url: '',
         stripe_price_id: '',
@@ -174,7 +174,7 @@ export function AddSongForm() {
                 setFormData({
                     title: '',
                     description: '',
-                    price: '',
+                    price: '200',
                     image_url: '',
                     mp3_url: '',
                     stripe_price_id: '',
