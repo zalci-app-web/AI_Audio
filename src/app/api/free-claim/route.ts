@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -39,7 +40,10 @@ export async function POST(request: Request) {
         }
 
         // Create purchase record
-        const { error } = await supabase
+        // Use admin client to bypass RLS policies for insertion
+        const supabaseAdmin = createAdminClient()
+
+        const { error } = await supabaseAdmin
             .from('purchases')
             .insert({
                 user_id: user.id,
