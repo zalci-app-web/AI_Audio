@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Upload, FolderInput, CheckCircle, Loader2 } from 'lucide-react'
+import { Upload, Music, Loader2, X, CheckCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 // Add webkitdirectory to InputHTMLAttributes
@@ -19,73 +19,38 @@ export function AddSongForm() {
     const [uploadProgress, setUploadProgress] = useState<string>('')
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    const [formData, setFormData] = useState({
-        title: '',
-        description: 'ライブラリに追加されます。audiostore.zalci.net',
-        // price and image are fixed in backend
-        // stripe_price_id is generated in backend
-        has_wav: false,
-        has_loop: false,
-        has_high_res: false,
-        has_midi: false,
-    })
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+    const [uploadResults, setUploadResults] = useState<{ name: string; status: 'pending' | 'success' | 'error'; message?: string }[]>([])
 
-    const [filesToUpload, setFilesToUpload] = useState<{
-        mp3?: File;
-        wav?: File;
-        loop?: File;
-        high_res?: File;
-        midi?: File;
-    }>({})
-
-    const handleFolderSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
         if (!files || files.length === 0) return
 
-        // Get folder name from the first file's path
-        // path is usually "FolderName/FileName.ext"
-        const firstFilePath = files[0].webkitRelativePath || files[0].name
-        const folderName = firstFilePath.split('/')[0]
+        const mp3Files = Array.from(files).filter(file => file.name.toLowerCase().endsWith('.mp3'))
 
-        const newFormData = { ...formData }
-        const newFiles: typeof filesToUpload = {}
+        if (mp3Files.length === 0) {
+            alert('MP3ファイルが見つかりませんでした。')
+            return
+        }
 
-        // Set Title from Folder Name
-        newFormData.title = folderName
-
-        // Reset flags
-        newFormData.has_wav = false
-        newFormData.has_loop = false
-        newFormData.has_high_res = false
-        newFormData.has_midi = false
-
-        Array.from(files).forEach(file => {
-            const lowerName = file.name.toLowerCase()
-
-            if (lowerName.endsWith('.mp3')) {
-                newFiles.mp3 = file
-            } else if (lowerName.endsWith('.wav')) {
-                newFormData.has_wav = true
-                newFiles.wav = file
-            } else if (lowerName.includes('loop')) {
-                newFormData.has_loop = true
-                newFiles.loop = file
-            } else if (lowerName.includes('high') || lowerName.includes('96k') || lowerName.includes('24bit')) {
-                newFormData.has_high_res = true
-                newFiles.high_res = file
-            } else if (lowerName.endsWith('.mid') || lowerName.endsWith('.midi')) {
-                newFormData.has_midi = true
-                newFiles.midi = file
-            }
-        })
-
-        setFormData(newFormData)
-        setFilesToUpload(newFiles)
-        setUploadProgress(`フォルダ "${folderName}" を読み込みました。${Object.keys(newFiles).length} 個のファイルを検出。`)
+        setSelectedFiles(prev => [...prev, ...mp3Files])
+        setUploadResults(prev => [
+            ...prev,
+            ...mp3Files.map(f => ({ name: f.name, status: 'pending' as const }))
+        ])
     }
 
-    const uploadFile = async (file: File, path: string) => {
+    const removeFile = (index: number) => {
+        setSelectedFiles(prev => prev.filter((_, i) => i !== index))
+        setUploadResults(prev => prev.filter((_, i) => i !== index))
+    }
+
+    const uploadFile = async (file: File, title: string) => {
         const supabase = createClient()
+        // songs/Title/Title.mp3
+        const ext = file.name.split('.').pop()
+        const path = `${title}/${title}.${ext}`
+
         const { data, error } = await supabase.storage
             .from('songs')
             .upload(path, file, {
@@ -104,71 +69,75 @@ export function AddSongForm() {
         return publicUrl
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleUploadAll = async () => {
         setIsLoading(true)
         setUploadProgress('アップロードを開始します...')
 
-        try {
-            let mp3Url = ''
+        const newResults = [...uploadResults]
+        let successCount = 0
 
-            // Upload MP3
-            if (filesToUpload.mp3) {
-                setUploadProgress('MP3ファイルをアップロード中...')
-                // songs/Title/Title.mp3
-                const ext = filesToUpload.mp3.name.split('.').pop()
-                const path = `${formData.title}/${formData.title}.${ext}`
-                mp3Url = await uploadFile(filesToUpload.mp3, path)
+        for (let i = 0; i < selectedFiles.length; i++) {
+            const file = selectedFiles[i]
+            const title = file.name.replace(/\.[^/.]+$/, "") // Remove extension
+
+            // Skip if already success
+            if (newResults[i].status === 'success') {
+                successCount++
+                continue
             }
 
-            // Note: DB insertions & Stripe creation
-            setUploadProgress('データベースとStripeに登録中...')
-            const response = await fetch('/api/admin/songs', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    title: formData.title,
-                    description: formData.description,
-                    mp3_url: mp3Url,
-                    // Flags
-                    has_wav: formData.has_wav,
-                    has_loop: formData.has_loop,
-                    has_high_res: formData.has_high_res,
-                    has_midi: formData.has_midi,
-                }),
-            })
+            try {
+                setUploadProgress(`(${i + 1}/${selectedFiles.length}) ${title} を処理中...`)
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
-                console.error('API Error:', errorData)
-                throw new Error(`Failed to add song: ${errorData.error || response.statusText}`)
-            }
+                // 1. Upload to Storage
+                const mp3Url = await uploadFile(file, title)
 
-            setUploadProgress('完了しました！')
-
-            // Reset
-            setTimeout(() => {
-                setFormData({
-                    title: '',
-                    description: 'ライブラリに追加されます。audiostore.zalci.net',
-                    has_wav: false,
-                    has_loop: false,
-                    has_high_res: false,
-                    has_midi: false,
+                // 2. Register to DB & Stripe
+                const response = await fetch('/api/admin/songs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        // description is set default in backend/API
+                        mp3_url: mp3Url,
+                        // Defaults
+                        has_wav: false,
+                        has_loop: false,
+                        has_high_res: false,
+                        has_midi: false,
+                    }),
                 })
-                setFilesToUpload({})
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+                    throw new Error(errorData.error || response.statusText)
+                }
+
+                newResults[i] = { name: file.name, status: 'success' }
+                successCount++
+
+            } catch (error) {
+                console.error(`Error uploading ${file.name}:`, error)
+                newResults[i] = {
+                    name: file.name,
+                    status: 'error',
+                    message: error instanceof Error ? error.message : 'Unknown error'
+                }
+            }
+
+            setUploadResults([...newResults])
+        }
+
+        setIsLoading(false)
+        setUploadProgress(`完了: ${successCount} / ${selectedFiles.length} 曲`)
+
+        if (successCount === selectedFiles.length) {
+            setTimeout(() => {
                 setIsOpen(false)
                 window.location.reload()
-            }, 1000)
-
-        } catch (error) {
-            console.error('Error adding song:', error)
-            alert('エラーが発生しました: ' + (error instanceof Error ? error.message : 'Unknown error'))
-            setUploadProgress('')
-        } finally {
-            setIsLoading(false)
+            }, 1500)
         }
     }
 
@@ -178,112 +147,95 @@ export function AddSongForm() {
                 onClick={() => setIsOpen(true)}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90"
             >
-                <FolderInput size={18} className="mr-2" />
-                フォルダから楽曲を追加
+                <Music size={18} className="mr-2" />
+                MP3を追加 (一括)
             </Button>
         )
     }
 
     return (
         <div className="rounded-xl border border-white/10 bg-zinc-900 p-6">
-            <h2 className="mb-6 text-2xl font-bold text-white">フォルダから楽曲追加</h2>
+            <h2 className="mb-6 text-2xl font-bold text-white">楽曲を追加 (MP3)</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-
-                {/* Folder Input */}
+            <div className="space-y-6">
+                {/* File Input */}
                 <div className="rounded-lg border-2 border-dashed border-white/20 p-8 text-center hover:border-blue-500/50 transition-colors">
                     <input
                         ref={fileInputRef}
                         type="file"
-                        webkitdirectory=""
-                        directory=""
-                        onChange={handleFolderSelect}
+                        accept=".mp3"
+                        multiple
+                        onChange={handleFileSelect}
                         className="hidden"
                     />
                     <div className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                        <FolderInput size={48} className="text-gray-400" />
+                        <Upload size={48} className="text-gray-400" />
                         <p className="text-lg font-medium text-white">
-                            {formData.title ? `選択中: ${formData.title}` : '楽曲フォルダを選択'}
+                            クリックしてMP3ファイルを選択
                         </p>
                         <p className="text-sm text-gray-500">
-                            フォルダ内のMP3を自動検出し、一括アップロードします
+                            複数選択可能 • ファイル名がタイトルになります
                         </p>
                     </div>
                 </div>
 
-                {uploadProgress && (
-                    <div className="rounded-lg bg-blue-500/20 p-4 text-blue-200 text-sm flex items-center gap-2">
-                        {isLoading && <Loader2 className="animate-spin h-4 w-4" />}
-                        {uploadProgress}
+                {/* Selected Files List */}
+                {selectedFiles.length > 0 && (
+                    <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                        {selectedFiles.map((file, index) => (
+                            <div key={index} className="flex items-center justify-between rounded bg-white/5 p-3">
+                                <div className="flex items-center gap-3 overflow-hidden">
+                                    <Music size={16} className="text-gray-400 flex-shrink-0" />
+                                    <span className="text-sm text-white truncate">{file.name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    {uploadResults[index]?.status === 'success' && <CheckCircle size={16} className="text-green-500" />}
+                                    {uploadResults[index]?.status === 'error' && <span className="text-xs text-red-500">{uploadResults[index].message || 'Error'}</span>}
+                                    {uploadResults[index]?.status === 'pending' && !isLoading && (
+                                        <button onClick={() => removeFile(index)} className="text-gray-500 hover:text-white">
+                                            <X size={16} />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
 
-                {/* Detect Files Summary */}
-                {formData.title && (
-                    <div className="grid grid-cols-2 gap-4 text-sm text-gray-300">
-                        <div className={filesToUpload.mp3 ? "text-green-400" : "text-gray-500"}>
-                            MP3: {filesToUpload.mp3 ? "✓ " + filesToUpload.mp3.name : "未検出 (必須)"}
+                {/* Progress & Actions */}
+                <div className="space-y-4">
+                    {uploadProgress && (
+                        <div className="text-sm text-blue-200 text-center animate-pulse">
+                            {uploadProgress}
                         </div>
-                        <div className="text-gray-400">
-                            画像: 固定画像を使用
-                        </div>
-                        <div className={filesToUpload.wav ? "text-green-400" : "text-gray-500"}>
-                            WAV: {filesToUpload.wav ? "✓ あり" : "なし"}
-                        </div>
-                        <div className={filesToUpload.midi ? "text-green-400" : "text-gray-500"}>
-                            MIDI: {filesToUpload.midi ? "✓ あり" : "なし"}
-                        </div>
+                    )}
+
+                    <div className="flex gap-3">
+                        <Button
+                            onClick={handleUploadAll}
+                            disabled={isLoading || selectedFiles.length === 0}
+                            className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    アップロード中...
+                                </>
+                            ) : (
+                                `すべてのファイルを登録 (${selectedFiles.length})`
+                            )}
+                        </Button>
+                        <Button
+                            onClick={() => setIsOpen(false)}
+                            variant="outline"
+                            disabled={isLoading}
+                            className="border-white/10 hover:bg-white/10"
+                        >
+                            キャンセル
+                        </Button>
                     </div>
-                )}
-
-                {/* Title (Editable) */}
-                <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                        タイトル (フォルダ名から自動入力)
-                    </label>
-                    <input
-                        type="text"
-                        required
-                        value={formData.title}
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        className="w-full rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                    />
                 </div>
-
-                {/* Description */}
-                <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                        説明
-                    </label>
-                    <textarea
-                        value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        className="w-full rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                        placeholder="楽曲の説明"
-                        rows={2}
-                    />
-                </div>
-
-                {/* Buttons */}
-                <div className="flex gap-3 pt-4">
-                    <Button
-                        type="submit"
-                        disabled={isLoading || !filesToUpload.mp3}
-                        className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90"
-                    >
-                        <Upload size={18} className="mr-2" />
-                        {isLoading ? '処理中...' : 'アップロードして登録'}
-                    </Button>
-                    <Button
-                        type="button"
-                        onClick={() => setIsOpen(false)}
-                        variant="outline"
-                        className="border-white/10 hover:bg-white/10"
-                    >
-                        キャンセル
-                    </Button>
-                </div>
-            </form>
+            </div>
         </div>
     )
 }
