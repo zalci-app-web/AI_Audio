@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 import { stripe } from '@/lib/stripe'
 import { FIXED_SONG_IMAGE_URL } from '@/lib/constants'
@@ -56,7 +57,10 @@ export async function POST(req: NextRequest) {
         const stripe_price_id = product.default_price as string
 
         // 2. Insert song into Database
-        const { data, error } = await supabase
+        // Use admin client to bypass RLS policies for insertion
+        const supabaseAdmin = createAdminClient()
+
+        const { data, error } = await supabaseAdmin
             .from('songs')
             .insert({
                 title,
@@ -115,7 +119,10 @@ export async function DELETE(req: NextRequest) {
         }
 
         // Delete song
-        const { error } = await supabase
+        // Use admin client to bypass RLS policies for deletion
+        const supabaseAdmin = createAdminClient()
+
+        const { error } = await supabaseAdmin
             .from('songs')
             .delete()
             .eq('id', songId)
