@@ -3,16 +3,18 @@ import { SongCard } from '@/components/SongCard'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
+import { SortSelect } from '@/components/features/SortSelect'
 
 export default async function SoundsPage({
     searchParams,
 }: {
-    searchParams: Promise<{ q?: string }>
+    searchParams: Promise<{ q?: string; sort?: string }>
 }) {
     let songs = null
     let error = null
     const params = await searchParams
     const searchQuery = params.q?.trim() || ''
+    const sortOption = params.sort || 'latest'
 
     try {
         const supabase = await createClient()
@@ -25,7 +27,30 @@ export default async function SoundsPage({
             query = query.or(`title.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`)
         }
 
-        const response = await query.order('created_at', { ascending: false })
+        // Apply sorting
+        switch (sortOption) {
+            case 'oldest':
+                query = query.order('created_at', { ascending: true })
+                break
+            case 'priceHigh': // Future proofing, though currently fixed
+                query = query.order('price', { ascending: false })
+                break
+            case 'priceLow':
+                query = query.order('price', { ascending: true })
+                break
+            case 'name_asc':
+                query = query.order('title', { ascending: true })
+                break
+            case 'name_desc':
+                query = query.order('title', { ascending: false })
+                break
+            case 'latest':
+            default:
+                query = query.order('created_at', { ascending: false })
+                break
+        }
+
+        const response = await query
 
         songs = response.data
 
@@ -47,17 +72,23 @@ export default async function SoundsPage({
 
             <main className="flex-1 pt-24 pb-16">
                 <section className="container mx-auto px-4">
-                    <div className="mb-12">
-                        <h1 className="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-                            {dict.sounds.title}
-                        </h1>
-                        <p className="text-xl text-gray-400">
-                            {searchQuery ? (
-                                <>検索結果: &quot;{searchQuery}&quot;</>
-                            ) : (
-                                dict.sounds.description
-                            )}
-                        </p>
+                    <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                        <div>
+                            <h1 className="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                                {dict.sounds.title}
+                            </h1>
+                            <p className="text-xl text-gray-400">
+                                {searchQuery ? (
+                                    <>検索結果: &quot;{searchQuery}&quot;</>
+                                ) : (
+                                    dict.sounds.description
+                                )}
+                            </p>
+                        </div>
+
+                        <div className="shrink-0">
+                            <SortSelect dict={dict.sounds.sort} />
+                        </div>
                     </div>
 
                     {error ? (
