@@ -20,6 +20,8 @@ export const dictionaries = {
             getStarted: 'Get Started',
             searchPlaceholder: 'Search songs...',
             myLibrary: 'My Library',
+            library: 'Library',
+            myPage: 'My Page',
         },
         featured: {
             title: 'Featured Tracks',
@@ -108,7 +110,9 @@ export const dictionaries = {
             signOut: 'ログアウト',
             getStarted: '始める',
             searchPlaceholder: '楽曲を検索...',
-            myLibrary: 'ライブラリ',
+            myLibrary: 'マイライブラリ',
+            library: 'ライブラリ',
+            myPage: 'マイページ',
         },
         featured: {
             title: '注目トラック',

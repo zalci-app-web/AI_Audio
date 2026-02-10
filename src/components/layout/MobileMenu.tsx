@@ -43,7 +43,7 @@ export function MobileMenu({ dict, user }: MobileMenuProps) {
                         className="text-lg font-semibold hover:text-blue-400 transition-colors"
                         onClick={() => setOpen(false)}
                     >
-                        {user ? 'My Library' : 'Library'}
+                        {user ? dict.myLibrary : dict.library}
                     </Link>
                     <Link
                         href="/about"
@@ -59,7 +59,7 @@ export function MobileMenu({ dict, user }: MobileMenuProps) {
                         <>
                             <Link href="/library" onClick={() => setOpen(false)}>
                                 <Button className="w-full" variant="secondary">
-                                    My Page
+                                    {dict.myPage}
                                 </Button>
                             </Link>
                             {/* Sign out is usually handled by server action or a separate button, 

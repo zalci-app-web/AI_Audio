@@ -46,7 +46,7 @@ export async function Header({ dict }: HeaderProps) {
                             {t.sounds}
                         </Link>
                         <Link href="/library" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                            {user ? (t.myLibrary || 'My Library') : 'Library'}
+                            {user ? t.myLibrary : t.library}
                         </Link>
                         <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60">
                             {t.about}
@@ -67,7 +67,7 @@ export async function Header({ dict }: HeaderProps) {
                         {user ? (
                             <Link href="/library">
                                 <Button variant="secondary" size="sm">
-                                    My Page
+                                    {t.myPage}
                                 </Button>
                             </Link>
                         ) : (
