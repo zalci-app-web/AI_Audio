@@ -21,11 +21,9 @@ export function AddSongForm() {
 
     const [formData, setFormData] = useState({
         title: '',
-        description: '',
-        price: '200',
-        image_url: '',
-        mp3_url: '',
-        stripe_price_id: '',
+        description: 'ライブラリに追加されます。audiostore.zalci.net',
+        // price and image are fixed in backend
+        // stripe_price_id is generated in backend
         has_wav: false,
         has_loop: false,
         has_high_res: false,
@@ -34,7 +32,6 @@ export function AddSongForm() {
 
     const [filesToUpload, setFilesToUpload] = useState<{
         mp3?: File;
-        image?: File;
         wav?: File;
         loop?: File;
         high_res?: File;
@@ -67,9 +64,6 @@ export function AddSongForm() {
 
             if (lowerName.endsWith('.mp3')) {
                 newFiles.mp3 = file
-            } else if (lowerName.endsWith('.jpg') || lowerName.endsWith('.jpeg') || lowerName.endsWith('.png') || lowerName.endsWith('.webp')) {
-                // Prefer avoiding "cover" or "folder" naming if multiple images exist, but here we just take the first one found or overwrite
-                newFiles.image = file
             } else if (lowerName.endsWith('.wav')) {
                 newFormData.has_wav = true
                 newFiles.wav = file
@@ -78,10 +72,6 @@ export function AddSongForm() {
                 newFiles.loop = file
             } else if (lowerName.includes('high') || lowerName.includes('96k') || lowerName.includes('24bit')) {
                 newFormData.has_high_res = true
-                // We don't necessarily upload these extra huge files via this form unless needed, 
-                // but user asked to send the folder. For now, let's upload MP3 and Image primarily 
-                // and just mark flags. If we need to upload others, we can add logic.
-                // The current requirement says "include them", let's upload them too.
                 newFiles.high_res = file
             } else if (lowerName.endsWith('.mid') || lowerName.endsWith('.midi')) {
                 newFormData.has_midi = true
@@ -120,9 +110,7 @@ export function AddSongForm() {
         setUploadProgress('アップロードを開始します...')
 
         try {
-            const timestamp = Date.now()
-            let mp3Url = formData.mp3_url
-            let imageUrl = formData.image_url
+            let mp3Url = ''
 
             // Upload MP3
             if (filesToUpload.mp3) {
@@ -133,31 +121,22 @@ export function AddSongForm() {
                 mp3Url = await uploadFile(filesToUpload.mp3, path)
             }
 
-            // Upload Image
-            if (filesToUpload.image) {
-                setUploadProgress('画像ファイルをアップロード中...')
-                // songs/Title/Title.jpg
-                const ext = filesToUpload.image.name.split('.').pop()
-                const path = `${formData.title}/${formData.title}.${ext}`
-                imageUrl = await uploadFile(filesToUpload.image, path)
-            }
-
-            // Upload other files if needed (Currently the DB only stores flags and MP3/Image URLs)
-            // If we want to store other file URLs, we'd need schema updates.
-            // For now, checks are automatically set based on file presence.
-
-            // Note: DB insertions
-            setUploadProgress('データベースに登録中...')
+            // Note: DB insertions & Stripe creation
+            setUploadProgress('データベースとStripeに登録中...')
             const response = await fetch('/api/admin/songs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    ...formData,
-                    price: parseInt(formData.price || '0'),
+                    title: formData.title,
+                    description: formData.description,
                     mp3_url: mp3Url,
-                    image_url: imageUrl,
+                    // Flags
+                    has_wav: formData.has_wav,
+                    has_loop: formData.has_loop,
+                    has_high_res: formData.has_high_res,
+                    has_midi: formData.has_midi,
                 }),
             })
 
@@ -173,11 +152,7 @@ export function AddSongForm() {
             setTimeout(() => {
                 setFormData({
                     title: '',
-                    description: '',
-                    price: '200',
-                    image_url: '',
-                    mp3_url: '',
-                    stripe_price_id: '',
+                    description: 'ライブラリに追加されます。audiostore.zalci.net',
                     has_wav: false,
                     has_loop: false,
                     has_high_res: false,
@@ -231,7 +206,7 @@ export function AddSongForm() {
                             {formData.title ? `選択中: ${formData.title}` : '楽曲フォルダを選択'}
                         </p>
                         <p className="text-sm text-gray-500">
-                            フォルダ内のMP3, 画像, WAV等を自動検出します
+                            フォルダ内のMP3を自動検出し、一括アップロードします
                         </p>
                     </div>
                 </div>
@@ -249,8 +224,8 @@ export function AddSongForm() {
                         <div className={filesToUpload.mp3 ? "text-green-400" : "text-gray-500"}>
                             MP3: {filesToUpload.mp3 ? "✓ " + filesToUpload.mp3.name : "未検出 (必須)"}
                         </div>
-                        <div className={filesToUpload.image ? "text-green-400" : "text-gray-500"}>
-                            画像: {filesToUpload.image ? "✓ " + filesToUpload.image.name : "未検出"}
+                        <div className="text-gray-400">
+                            画像: 固定画像を使用
                         </div>
                         <div className={filesToUpload.wav ? "text-green-400" : "text-gray-500"}>
                             WAV: {filesToUpload.wav ? "✓ あり" : "なし"}
@@ -275,21 +250,6 @@ export function AddSongForm() {
                     />
                 </div>
 
-                {/* Price */}
-                <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                        価格（円） <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                        type="number"
-                        required
-                        value={formData.price}
-                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                        className="w-full rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                        placeholder="1000"
-                    />
-                </div>
-
                 {/* Description */}
                 <div>
                     <label className="mb-2 block text-sm font-medium text-gray-300">
@@ -301,21 +261,6 @@ export function AddSongForm() {
                         className="w-full rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
                         placeholder="楽曲の説明"
                         rows={2}
-                    />
-                </div>
-
-                {/* Stripe Price ID */}
-                <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-300">
-                        Stripe Price ID <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        required
-                        value={formData.stripe_price_id}
-                        onChange={(e) => setFormData({ ...formData, stripe_price_id: e.target.value })}
-                        className="w-full rounded-lg border border-white/10 bg-black/20 px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                        placeholder="price_xxxxx"
                     />
                 </div>
 

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+import { stripe } from '@/lib/stripe'
+import { FIXED_SONG_IMAGE_URL } from '@/lib/constants'
+
 export async function POST(req: NextRequest) {
     try {
         const supabase = await createClient()
@@ -17,10 +20,10 @@ export async function POST(req: NextRequest) {
         const {
             title,
             description,
-            price,
-            image_url,
+            // price is fixed to 200
+            // image_url is fixed
             mp3_url,
-            stripe_price_id,
+            // stripe_price_id is generated
             has_wav,
             has_loop,
             has_high_res,
@@ -28,21 +31,38 @@ export async function POST(req: NextRequest) {
         } = body
 
         // Validate required fields
-        if (!title || !price || !image_url || !mp3_url || !stripe_price_id) {
+        if (!title || !mp3_url) {
             return NextResponse.json(
                 { error: 'Missing required fields' },
                 { status: 400 }
             )
         }
 
-        // Insert song
+        // 1. Create Stripe Product & Price
+        const product = await stripe.products.create({
+            name: `${title} (200円)`,
+            description: description || 'ライブラリに追加されます。audiostore.zalci.net',
+            images: [FIXED_SONG_IMAGE_URL],
+            metadata: {
+                app: 'zalci-audio',
+            },
+            default_price_data: {
+                currency: 'jpy',
+                unit_amount: 200, // Fixed price 200 JPY
+                tax_behavior: 'inclusive',
+            },
+        })
+
+        const stripe_price_id = product.default_price as string
+
+        // 2. Insert song into Database
         const { data, error } = await supabase
             .from('songs')
             .insert({
                 title,
-                description: description || null,
-                price,
-                image_url,
+                description: description || 'ライブラリに追加されます。audiostore.zalci.net',
+                price: 200,
+                image_url: FIXED_SONG_IMAGE_URL,
                 mp3_url,
                 preview_url: mp3_url, // Use mp3_url as preview
                 stripe_price_id,
