@@ -33,6 +33,7 @@ export const dictionaries = {
             pricing: 'Pricing',
             about: 'About',
             terms: 'Terms of Service',
+            privacy: 'Privacy Policy',
             legal: 'Legal',
             login: 'Login',
             signOut: 'Sign Out',
@@ -147,6 +148,52 @@ export const dictionaries = {
                     content: 'We reserve the right to modify these terms at any time. Continued use of the service constitutes acceptance of the new terms.'
                 }
             ]
+        },
+        policy: {
+            title: 'Privacy Policy',
+            intro: 'Zalci Audio established the following privacy policy regarding the handling of user personal information in the services provided on this site.',
+            sections: [
+                {
+                    title: 'Article 1 (Personal Information)',
+                    content: '"Personal Information" refers to "personal information" as defined in the Personal Information Protection Act, which is information about a living individual that can identify a specific individual by name, date of birth, address, telephone number, contact information, or other description contained in such information, as well as data related to appearance, fingerprints, voiceprints, and information that can identify a specific individual from such information alone, such as the insurer number on a health insurance card.'
+                },
+                {
+                    title: 'Article 2 (Method of Collection)',
+                    content: 'We may collect the following information when you use our service:\n\nUser Provided Information: Name, email address, address, phone number, and other information required for account registration and payment.\n\nPayment Information: Credit card information (Credit card information is managed by the payment processing company and is not held by our site).\n\nAutomatically Collected Information: IP address, cookies, access logs, usage environment (browser, OS, etc.), and access analysis data such as time spent on the site.'
+                },
+                {
+                    title: 'Article 3 (Management and Security)',
+                    content: 'Password Protection: We collect and maintain the email address and password for your account. Passwords are salted and hashed using appropriate algorithms and stored securely so that even site administrators cannot view or restore the original password.\n\nSecurity Measures: We implement SSL encryption for communication and appropriate technical measures to prevent unauthorized access, aiming to prevent leakage, loss, or damage of personal information.\n\nUser Responsibility: You are responsible for managing your password properly to prevent it from being known to third parties. We strongly recommend avoiding easily guessable passwords or reusing passwords from other sites.'
+                },
+                {
+                    title: 'Article 4 (Purpose of Use)',
+                    content: 'We collect and use personal information for the following purposes:\n\nTo provide and operate our services (sending download links, providing My Page functions, etc.).\n\nTo respond to user inquiries (including identity verification).\n\nTo bill for paid services.\n\nTo contact you as necessary for maintenance or important notices.\n\nTo identify users who violate the Terms of Service or attempt to use the service for fraudulent or unjust purposes, and to refuse their use.\n\nPurposes incidental to the above utilization purposes.'
+                },
+                {
+                    title: 'Article 5 (Third-Party Provision)',
+                    content: 'We will not provide personal information to third parties without obtaining the user\'s prior consent, except in the following cases, unless permitted by the Personal Information Protection Act or other laws and regulations:\n\nWhen it is necessary for the protection of the life, body, or property of a person and it is difficult to obtain the consent of the person.\n\nWhen it is particularly necessary for improving public health or promoting the sound growth of children and it is difficult to obtain the consent of the person.\n\nWhen it is necessary to cooperate with a national agency, a local government, or an individual or entity entrusted by either in executing affairs prescribed by laws and regulations and obtaining the consent of the person is likely to impede the execution of such affairs.'
+                },
+                {
+                    title: 'Article 6 (External Entrustment)',
+                    content: 'We may entrust a part of the handling of personal information to third parties (payment processing companies, server management companies, etc.) to the extent necessary for the operation of this service. In this case, we will exercise appropriate supervision, such as concluding a confidentiality agreement with the entrusted party.\n\nCredit Card Payment: We use Stripe, Inc.\'s payment service for credit card payments. Your credit card information is sent directly to Stripe\'s servers and is not stored on our servers or databases at all.'
+                },
+                {
+                    title: 'Article 7 (Access Analysis Tools)',
+                    content: 'This site uses "Google Analytics" by Google for access analysis. Google Analytics uses cookies to collect traffic data. This traffic data is collected anonymously and does not identify individuals. You can refuse collection by disabling cookies, so please check your browser settings.'
+                },
+                {
+                    title: 'Article 8 (Disclosure, Correction, Suspension of Use, etc.)',
+                    content: 'When a user requests disclosure, correction, addition, deletion, suspension of use, or elimination of personal information, we will respond without delay after confirming the identity of the person. However, this does not apply if we are not obligated to disclose, etc., under the Personal Information Protection Act or other laws.'
+                },
+                {
+                    title: 'Article 9 (Changes to Privacy Policy)',
+                    content: 'The contents of this policy may be changed without notice to the user, except for matters otherwise provided by law or this policy. Unless otherwise specified by this site, the changed privacy policy shall take effect from the time it is posted on this website.'
+                },
+                {
+                    title: 'Article 10 (Contact Information)',
+                    content: 'For inquiries regarding this policy, please contact the following:\n\nSeller: Zalci Audio\nExample Email: zalciapp@gmail.com\nAddress/Phone: Please refer to the "Specific Commercial Transactions" page.'
+                }
+            ]
         }
     },
     ja: {
@@ -181,6 +228,7 @@ export const dictionaries = {
             pricing: '料金',
             about: '概要',
             terms: '利用規約',
+            privacy: 'プライバシーポリシー',
             legal: '特定商取引法',
             login: 'ログイン',
             signOut: 'ログアウト',
@@ -301,6 +349,52 @@ export const dictionaries = {
                 {
                     title: '第8条（準拠法・裁判管轄）',
                     content: '準拠法: 本規約の解釈にあたっては、日本法を準拠法とします。\n\n管轄裁判所: 本サービスに関して紛争が生じた場合には、当サイト運営者の所在地を管轄する地方裁判所を第一審の専属的合意管轄裁判所とします。'
+                }
+            ]
+        },
+        policy: {
+            title: 'プライバシーポリシー',
+            intro: 'Zalci Audio（以下「当サイト」といいます）は、当サイトが提供するサービス（以下「本サービス」といいます）における、ユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下「本ポリシー」といいます）を定めます。',
+            sections: [
+                {
+                    title: '第1条（個人情報）',
+                    content: '「個人情報」とは、個人情報保護法にいう「個人情報」を指すものとし、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日、住所、電話番号、連絡先その他の記述等により特定の個人を識別できる情報、および容貌、指紋、声紋にかかるデータ、および健康保険証の保険者番号などの当該情報単体から特定の個人を識別できる情報（個人識別符号）を指します。'
+                },
+                {
+                    title: '第2条（個人情報の収集方法）',
+                    content: '当サイトは、ユーザーが本サービスを利用する際に、以下の情報を収集する場合があります。\n\nユーザー提供情報: 氏名、メールアドレス、住所、電話番号、その他アカウント登録および決済時に必要な情報。\n\n決済情報: クレジットカード情報、銀行口座情報（※クレジットカード情報は決済代行会社が管理し、当サイトでは非保持化されています）。\n\n自動取得情報: IPアドレス、Cookie（クッキー）、アクセスログ、利用環境（ブラウザ、OS等）、滞在時間等のアクセス解析データ。'
+                },
+                {
+                    title: '第3条（情報の管理とセキュリティ）',
+                    content: 'パスワードの保護: 当サイトは、ユーザーが作成したアカウントのメールアドレスおよびパスワードを収集・保持します。パスワードについては、適切なハッシュ化アルゴリズム（ソルト付与等）を用いて暗号化した状態で保存し、当サイト運営者であっても元のパスワードを閲覧・復元できない仕組みを導入し、厳重に管理いたします。\n\n安全管理措置: 当サイトは、個人情報の漏洩、滅失または毀損の防止その他の個人情報の安全管理のために、SSL（Secure Sockets Layer）による通信の暗号化や、不正アクセス防止のための適切な技術的対策を講じます。\n\nユーザーの責任: ユーザーは、自己のパスワードを第三者に知られないよう、適切に管理する責任を負うものとします。パスワードの推測が容易な文字列の使用や、他サイトとの使い回しを避けることを強く推奨します。'
+                },
+                {
+                    title: '第4条（個人情報の利用目的）',
+                    content: '当サイトが個人情報を収集・利用する目的は、以下のとおりです。\n\n本サービスの提供・運営のため（ダウンロードリンクの送付、マイページ機能の提供等）。\n\nユーザーからのお問い合わせに回答するため（本人確認を行うことを含む）。\n\n有料サービスにおいて、利用料金を請求するため。\n\nメンテナンス、重要なお知らせなど必要に応じたご連絡のため。\n\n利用規約に違反したユーザーや、不正・不当な目的でサービスを利用しようとするユーザーの特定をし、ご利用をお断りするため。\n\n上記の利用目的に付随する目的。'
+                },
+                {
+                    title: '第5条（個人情報の第三者提供）',
+                    content: '当サイトは、次に掲げる場合を除いて、あらかじめユーザーの同意を得ることなく、第三者に個人情報を提供することはありません。ただし、個人情報保護法その他の法令で認められる場合を除きます。\n\n人の生命、身体または財産の保護のために必要がある場合であって、本人の同意を得ることが困難であるとき。\n\n公衆衛生の向上または児童の健全な育成の推進のために特に必要がある場合であって、本人の同意を得ることが困難であるとき。\n\n国の機関もしくは地方公共団体またはその委託を受けた者が法令の定める事務を遂行することに対して協力する必要がある場合であって、本人の同意を得ることにより当該事務の遂行に支障を及ぼすおそれがあるとき。'
+                },
+                {
+                    title: '第6条（外部委託および決済代行）',
+                    content: '当サイトは、本サービスの運営に必要な範囲で、個人情報の取扱いの一部を外部（決済代行会社、サーバー管理会社等）に委託する場合があります。この場合、当サイトは当該委託先との間で機密保持契約を締結する等の適切な監督を行います。\n\nクレジットカード決済: 本サービスのクレジットカード決済には、Stripe, Inc.（Stripe Japan株式会社）の決済サービスを利用しています。ユーザーのクレジットカード情報はStripeのサーバーに直接送信され、当サイトのサーバー・データベース内には一切保存されません。'
+                },
+                {
+                    title: '第7条（アクセス解析ツールについて）',
+                    content: '当サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を利用しています。このGoogleアナリティクスはトラフィックデータの収集のためにCookieを使用しています。このトラフィックデータは匿名で収集されており、個人を特定するものではありません。この機能はCookieを無効にすることで収集を拒否することが出来ますので、お使いのブラウザの設定をご確認ください。'
+                },
+                {
+                    title: '第8条（個人情報の開示・訂正・利用停止等）',
+                    content: 'ユーザーから個人情報の開示、訂正、追加、削除、利用停止、消去（以下「開示等」といいます）を求められたときは、ご本人であることを確認させていただいた上で、遅滞なく対応いたします。ただし、個人情報保護法その他の法令により、当サイトが開示等の義務を負わない場合は、この限りではありません。'
+                },
+                {
+                    title: '第9条（プライバシーポリシーの変更）',
+                    content: '本ポリシーの内容は、法令その他本ポリシーに別段の定めのある事項を除いて、ユーザーに通知することなく変更することができるものとします。当サイトが別途定める場合を除いて、変更後のプライバシーポリシーは、本ウェブサイトに掲載したときから効力を生じるものとします。'
+                },
+                {
+                    title: '第10条（お問い合わせ窓口）',
+                    content: '本ポリシーに関するお問い合わせは、下記の窓口までお願いいたします。\n\n販売業者: Zalci Audio\nメールアドレス: zalciapp@gmail.com\n住所・電話番号: 「特定商取引法に基づく表記」ページをご参照ください。'
                 }
             ]
         }

@@ -59,6 +59,9 @@ export async function Header({ dict, notifications }: HeaderProps) {
                         <Link href="/terms" className="transition-colors hover:text-foreground/80 text-foreground/60">
                             {t.terms}
                         </Link>
+                        <Link href="/policy" className="transition-colors hover:text-foreground/80 text-foreground/60">
+                            {t.privacy}
+                        </Link>
                         <Link href="/legal" className="transition-colors hover:text-foreground/80 text-foreground/60">
                             {t.legal}
                         </Link>
