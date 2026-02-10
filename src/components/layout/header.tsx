@@ -6,12 +6,14 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { SearchBar } from '@/components/SearchBar'
 import { dictionaries } from '@/lib/dictionaries'
 import { MobileMenu } from './MobileMenu' // New client component for mobile menu
+import { NotificationBell } from '@/components/features/NotificationBell'
 
 interface HeaderProps {
     dict: typeof dictionaries.en.header
+    notifications: any
 }
 
-export async function Header({ dict }: HeaderProps) {
+export async function Header({ dict, notifications }: HeaderProps) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -30,7 +32,10 @@ export async function Header({ dict }: HeaderProps) {
                             {t.title}
                         </span>
                     </Link>
-                    <MobileMenu dict={t} user={!!user} />
+                    <div className="flex items-center gap-2">
+                        <NotificationBell dict={notifications} />
+                        <MobileMenu dict={t} user={!!user} />
+                    </div>
                 </div>
 
                 {/* Desktop Navigation */}
@@ -85,6 +90,7 @@ export async function Header({ dict }: HeaderProps) {
                                 </Link>
                             </>
                         )}
+                        <NotificationBell dict={notifications} />
                     </nav>
                 </div>
             </div>

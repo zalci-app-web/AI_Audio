@@ -35,7 +35,7 @@ export default async function Home() {
   if (error) {
     return (
       <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100">
-        <Header dict={dict.header} />
+        <Header dict={dict.header} notifications={dict.notifications} />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-xl text-red-400 mb-2">Error Loading Songs</h2>
@@ -63,7 +63,7 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100 font-sans">
-      <Header dict={dict.header} />
+      <Header dict={dict.header} notifications={dict.notifications} />
 
       <main className="flex-1">
         <Hero dict={dict.hero} user={user} />

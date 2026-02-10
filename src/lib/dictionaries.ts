@@ -10,6 +10,23 @@ export const dictionaries = {
             twitterFollow: 'Follow along on X',
             loggedIn: 'Logged In',
         },
+        notifications: {
+            title: 'Notifications',
+            empty: 'No new notifications.',
+            markRead: 'Mark all as read',
+            items: [
+                {
+                    id: '1',
+                    date: '2026-02-10',
+                    content: 'Welcome to Zalci Audio! Explore our new collection of AI-generated sounds.'
+                },
+                {
+                    id: '2',
+                    date: '2026-02-09',
+                    content: 'Maintenance scheduled for Feb 15th, 2026 (02:00 - 04:00 UTC).'
+                }
+            ]
+        },
         header: {
             title: 'Zalci Audio',
             sounds: 'Sounds',
@@ -140,6 +157,23 @@ export const dictionaries = {
             browseLibrary: 'ライブラリを見る',
             twitterFollow: 'Xでフォローする',
             loggedIn: 'ログイン済み',
+        },
+        notifications: {
+            title: 'お知らせ',
+            empty: '新しいお知らせはありません。',
+            markRead: 'すべて既読にする',
+            items: [
+                {
+                    id: '1',
+                    date: '2026/02/10',
+                    content: 'Zalci Audioへようこそ！新着のAI生成サウンドをぜひチェックしてください。'
+                },
+                {
+                    id: '2',
+                    date: '2026/02/09',
+                    content: '2026年2月15日 (02:00 - 04:00 UTC) にシステムメンテナンスを実施予定です。'
+                }
+            ]
         },
         header: {
             title: 'Zalci Audio',

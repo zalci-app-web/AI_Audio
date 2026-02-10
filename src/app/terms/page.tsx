@@ -10,7 +10,7 @@ export default async function TermsPage() {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100 font-sans">
-            <Header dict={dict.header} />
+            <Header dict={dict.header} notifications={dict.notifications} />
 
             <main className="flex-1 container mx-auto px-4 py-16 max-w-4xl">
                 <div className="bg-zinc-900/50 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">

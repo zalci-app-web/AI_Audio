@@ -44,7 +44,7 @@ export default async function LibraryPage() {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100 font-sans">
-            <Header dict={dict.header} />
+            <Header dict={dict.header} notifications={dict.notifications} />
 
             <main className="flex-1 pt-24 pb-16">
                 <div className="container mx-auto px-4">
