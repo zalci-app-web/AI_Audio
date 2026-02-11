@@ -52,6 +52,9 @@ export const dictionaries = {
             buyNow: 'Buy Now',
             processing: 'Processing...',
             error: 'Something went wrong. Please try again.',
+            inLibrary: 'In Library',
+            free: 'FREE',
+            freeDownload: 'Free Download',
         },
         sounds: {
             title: 'All Sounds',
@@ -220,8 +223,8 @@ export const dictionaries = {
     },
     ja: {
         hero: {
-            title: 'クリエイターのための最高級AIオーディオ資産',
-            description: '高度なAIによって生成された高品質でロイヤリティフリーのオーディオトラック。ゲーム、動画、ストリーミングに最適です。',
+            title: 'クリエイターのための最高級AIオーディオアセット',
+            description: '高度なAIによって生成されたクリーンで高品質なロイヤリティフリーのオーディオトラック。ゲーム、動画、ストリーミングに最適です。',
             getStarted: '始める',
             browseLibrary: 'ライブラリを見る',
             twitterFollow: 'Xでフォローする',
@@ -269,6 +272,9 @@ export const dictionaries = {
             buyNow: '購入する',
             processing: '処理中...',
             error: 'エラーが発生しました。もう一度お試しください。',
+            inLibrary: '保有済み',
+            free: '無料',
+            freeDownload: '無料期間',
         },
         sounds: {
             title: '全サウンド一覧',

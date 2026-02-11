@@ -24,6 +24,9 @@ interface SongCardProps {
         buyNow: string
         processing: string
         error: string
+        inLibrary: string
+        free: string
+        freeDownload: string
         purchaseModal: any // Using any for simplicity here to avoid duplicating the type, or we can export it
     }
     user?: any
@@ -149,7 +152,7 @@ export function SongCard({ song, dict, user, isPurchased = false }: SongCardProp
                         <h3 className="text-lg font-bold text-white truncate">{song.title}</h3>
                         <div className="flex items-center gap-2">
                             <p className="text-sm text-gray-400 line-through">¥{song.price.toLocaleString()}</p>
-                            <span className="text-sm font-bold text-green-400">FREE</span>
+                            <span className="text-sm font-bold text-green-400">{dict.free}</span>
                         </div>
                     </div>
 
@@ -157,18 +160,18 @@ export function SongCard({ song, dict, user, isPurchased = false }: SongCardProp
                         onClick={handleBuyClick}
                         disabled={isLoading}
                         className={`flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed ${isPurchased
-                                ? 'bg-zinc-700'
-                                : 'bg-gradient-to-r from-green-500 to-emerald-600'
+                            ? 'bg-zinc-700'
+                            : 'bg-gradient-to-r from-green-500 to-emerald-600'
                             }`}
                     >
                         {isLoading ? (
                             dict.processing
                         ) : isPurchased ? (
-                            'In Library'
+                            dict.inLibrary
                         ) : (
                             <>
                                 <ShoppingCart size={16} />
-                                Free Download
+                                {dict.freeDownload}
                             </>
                         )}
                     </button>

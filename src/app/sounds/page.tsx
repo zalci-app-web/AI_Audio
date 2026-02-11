@@ -5,6 +5,8 @@ import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
 import { SortSelect } from '@/components/features/SortSelect'
 
+export const dynamic = 'force-dynamic'
+
 export default async function SoundsPage({
     searchParams,
 }: {
@@ -15,9 +17,9 @@ export default async function SoundsPage({
     const params = await searchParams
     const searchQuery = params.q?.trim() || ''
     const sortOption = params.sort || 'latest'
+    const supabase = await createClient()
 
     try {
-        const supabase = await createClient()
         let query = supabase
             .from('songs')
             .select('*')
@@ -64,6 +66,20 @@ export default async function SoundsPage({
         error = e
     }
 
+    const { data: { user } } = await supabase.auth.getUser()
+
+    let purchasedSongIds = new Set<string>()
+    if (user) {
+        const { data: purchases } = await supabase
+            .from('purchases')
+            .select('song_id')
+            .eq('user_id', user.id)
+
+        if (purchases) {
+            purchases.forEach(p => purchasedSongIds.add(p.song_id))
+        }
+    }
+
     const dict = await getDictionary()
 
     return (
@@ -107,6 +123,8 @@ export default async function SoundsPage({
                                     key={song.id}
                                     song={song}
                                     dict={{ ...dict.card, purchaseModal: dict.purchaseModal }}
+                                    user={user}
+                                    isPurchased={purchasedSongIds.has(song.id)}
                                 />
                             ))}
                         </div>
