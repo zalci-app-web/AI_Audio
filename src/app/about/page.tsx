@@ -13,37 +13,40 @@ export default async function AboutPage() {
                 <div className="container mx-auto px-4">
                     {/* Hero Section */}
                     <div className="mb-16 text-center">
-                        <h1 className="mb-6 text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 sm:text-6xl">
+                        <h1 className="mb-6 text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 sm:text-6xl text-balance">
                             Zalci Audio
                         </h1>
-                        <p className="mx-auto max-w-2xl text-xl text-gray-400">
-                            Unleash the sound within.
+                        <p className="mx-auto max-w-2xl text-xl text-gray-400 text-pretty break-auto-phrase">
+                            {dict.about.tagline}
                         </p>
                     </div>
 
                     {/* Content Section */}
-                    <div className="mx-auto max-w-3xl space-y-12">
+                    <div className="mx-auto max-w-3xl space-y-16">
                         <section className="space-y-4">
-                            <h2 className="text-2xl font-bold text-white text-balance">{dict.about.missionTitle}</h2>
-                            <p className="leading-relaxed text-gray-300 text-pretty break-auto-phrase">
-                                {dict.about.missionDesc}
+                            <h2 className="text-2xl font-bold text-white text-balance">{dict.about.conceptTitle}</h2>
+                            <p className="leading-relaxed text-gray-300 text-pretty break-auto-phrase whitespace-pre-line">
+                                {dict.about.conceptDesc}
                             </p>
                         </section>
 
                         <section className="space-y-4">
-                            <h2 className="text-2xl font-bold text-white text-balance">{dict.about.creatorTitle}</h2>
-                            <div className="rounded-2xl border border-white/10 bg-zinc-900/50 p-8">
-                                <p className="leading-relaxed text-gray-300 text-pretty break-auto-phrase">
-                                    {dict.about.creatorDesc}
+                            <h2 className="text-2xl font-bold text-white text-balance">{dict.about.roadmapTitle}</h2>
+                            <div className="rounded-2xl border border-white/10 bg-zinc-900/40 p-8">
+                                <p className="leading-relaxed text-gray-300 text-pretty break-auto-phrase whitespace-pre-line">
+                                    {dict.about.roadmapDesc}
                                 </p>
                             </div>
                         </section>
 
                         <section className="space-y-4">
-                            <h2 className="text-2xl font-bold text-white text-balance">{dict.about.contactTitle}</h2>
-                            <p className="leading-relaxed text-gray-300 text-pretty break-auto-phrase">
-                                {dict.about.contactDesc}
-                            </p>
+                            <h2 className="text-2xl font-bold text-white text-balance">{dict.about.messageTitle}</h2>
+                            <div className="rounded-2xl border border-blue-500/20 bg-blue-500/5 p-8 relative overflow-hidden group">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-10 transition duration-500 blur-xl" />
+                                <p className="leading-relaxed text-gray-300 text-pretty break-auto-phrase relative z-10">
+                                    {dict.about.messageDesc}
+                                </p>
+                            </div>
                         </section>
                     </div>
                 </div>
