@@ -58,7 +58,7 @@ export function AccountSettings({ dict, email }: AccountSettingsProps) {
         setIsSendingReset(true)
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/auth/callback?next=/update-password`,
+                redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/auth/callback?next=/update-password`,
             })
             if (error) throw error
             alert(dict.passwordResetEmailSent)

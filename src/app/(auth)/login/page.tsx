@@ -15,13 +15,14 @@ function LoginContent() {
     const [isSignUp, setIsSignUp] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [successMessage, setSuccessMessage] = useState<string | null>(null)
+    const [newsletterConsent, setNewsletterConsent] = useState(false)
     const router = useRouter()
     // useSearchParams is safe here because this component is wrapped in Suspense
     const searchParams = useSearchParams()
 
     // Simple way to detect locale on client for now, or default to en
     // ideally we pass this from server component wrappers
-    const [dict, setDict] = useState(dictionaries.en.login)
+    const [dict, setDict] = useState<typeof dictionaries.en.login>(dictionaries.en.login)
 
     useEffect(() => {
         // Check cookie or simple detection
@@ -47,10 +48,13 @@ function LoginContent() {
                     password,
                     options: {
                         emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/auth/callback`,
+                        data: {
+                            newsletter_subscribed: newsletterConsent
+                        }
                     },
                 })
                 if (error) throw error
-                setSuccessMessage(dict.successDesc)
+                setSuccessMessage(dict.welcomeDesc)
             } else {
                 const { error } = await supabase.auth.signInWithPassword({
                     email,
@@ -79,7 +83,7 @@ function LoginContent() {
             <div className="w-full max-w-md rounded-2xl border border-white/10 bg-zinc-900/50 p-8 backdrop-blur shadow-xl">
                 <div className="mb-6 text-center">
                     <h1 className="text-2xl font-bold text-white">
-                        {isSignUp ? dict.signUpTitle : dict.signInTitle}
+                        {isSignUp ? dict.createAccount : dict.welcome}
                     </h1>
                 </div>
 
@@ -91,7 +95,7 @@ function LoginContent() {
 
                 {successMessage && (
                     <div className="mb-6 rounded-lg bg-green-500/10 p-4 text-sm text-green-400 border border-green-500/20">
-                        <h3 className="font-bold mb-1">{dict.successTitle}</h3>
+                        <h3 className="font-bold mb-1">{dict.welcome}</h3>
                         <p>{successMessage}</p>
                     </div>
                 )}
@@ -135,20 +139,34 @@ function LoginContent() {
                     </div>
 
                     {isSignUp && (
-                        <div className="flex items-start space-x-2">
-                            <input
-                                type="checkbox"
-                                id="terms"
-                                required
-                                className="mt-1 h-4 w-4 rounded border-gray-300 bg-black/50 text-blue-600 focus:ring-blue-500"
-                            />
-                            <label htmlFor="terms" className="text-sm text-gray-400">
-                                <Link href="/terms" target="_blank" className="text-blue-400 hover:underline">利用規約</Link>
-                                と
-                                <Link href="/policy" target="_blank" className="text-blue-400 hover:underline">プライバシーポリシー</Link>
-                                に同意します
-                            </label>
-                        </div>
+                        <>
+                            <div className="flex items-start space-x-2">
+                                <input
+                                    type="checkbox"
+                                    id="terms"
+                                    required
+                                    className="mt-1 h-4 w-4 rounded border-gray-300 bg-black/50 text-blue-600 focus:ring-blue-500"
+                                />
+                                <label htmlFor="terms" className="text-sm text-gray-400">
+                                    <Link href="/terms" target="_blank" className="text-blue-400 hover:underline">利用規約</Link>
+                                    と
+                                    <Link href="/policy" target="_blank" className="text-blue-400 hover:underline">プライバシーポリシー</Link>
+                                    に同意します
+                                </label>
+                            </div>
+                            <div className="flex items-start space-x-2 mt-4">
+                                <input
+                                    type="checkbox"
+                                    id="newsletter"
+                                    checked={newsletterConsent}
+                                    onChange={(e) => setNewsletterConsent(e.target.checked)}
+                                    className="mt-1 h-4 w-4 rounded border-gray-300 bg-black/50 text-blue-600 focus:ring-blue-500"
+                                />
+                                <label htmlFor="newsletter" className="text-sm text-gray-400">
+                                    {dict.newsletterLabel}
+                                </label>
+                            </div>
+                        </>
                     )}
 
                     <Button
@@ -159,7 +177,7 @@ function LoginContent() {
                         {isLoading ? (
                             <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {dict.loading}</>
                         ) : (
-                            isSignUp ? dict.signUpButton : dict.signInButton
+                            isSignUp ? dict.submitButtonSignUp : dict.submitButton
                         )}
                     </Button>
                 </form>
@@ -169,7 +187,7 @@ function LoginContent() {
                         onClick={() => setIsSignUp(!isSignUp)}
                         className="text-sm text-gray-400 hover:text-white transition-colors"
                     >
-                        {isSignUp ? dict.toggleToSignIn : dict.toggleToSignUp}
+                        {isSignUp ? dict.hasAccount : dict.noAccount}
                     </button>
                     <p className="mt-4 text-xs text-gray-600">
                         <Link href="/" className="hover:text-gray-400">

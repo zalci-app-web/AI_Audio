@@ -1,14 +1,5 @@
 import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
-
-// Lazy initialization to avoid build-time errors when env var is missing
-function getResendClient() {
-    const apiKey = process.env.RESEND_API_KEY
-    if (!apiKey) {
-        throw new Error('RESEND_API_KEY is not configured')
-    }
-    return new Resend(apiKey)
-}
+import { getResendClient } from '@/lib/email'
 
 export async function POST(request: Request) {
     try {
@@ -27,6 +18,9 @@ export async function POST(request: Request) {
 
         // Initialize Resend client only when actually sending email
         const resend = getResendClient()
+        if (!resend) {
+            throw new Error('Email service is not configured')
+        }
 
         // Send email using Resend
         await resend.emails.send({

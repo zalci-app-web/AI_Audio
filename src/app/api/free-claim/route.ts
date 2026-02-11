@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
+import { sendPurchaseEmail } from '@/lib/email'
 
 export async function POST(request: Request) {
     try {
@@ -39,6 +40,13 @@ export async function POST(request: Request) {
             )
         }
 
+        // Fetch song details for email
+        const { data: song } = await supabase
+            .from('songs')
+            .select('title')
+            .eq('id', songId)
+            .single()
+
         // Create purchase record
         // Use admin client to bypass RLS policies for insertion
         const supabaseAdmin = createAdminClient()
@@ -59,6 +67,15 @@ export async function POST(request: Request) {
                 { error: 'Failed to create purchase' },
                 { status: 500 }
             )
+        }
+
+        // Send confirmation email
+        if (user.email && song?.title) {
+            // We don't await this to keep the response fast, or we catch errors so it doesn't fail the request
+            /* eslint-disable-next-line */
+            sendPurchaseEmail(user.email, song.title, true).catch((err: any) => {
+                console.error('Failed to send free purchase email:', err)
+            })
         }
 
         return NextResponse.json(
