@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
         // Get song details
         const { data: song, error: songError } = await supabase
             .from('songs')
-            .select('title, preview_url')
+            .select('title, mp3_url')
             .eq('id', songId)
             .single()
 
@@ -52,14 +52,35 @@ export async function GET(req: NextRequest) {
             )
         }
 
-        // In a real implementation, you would:
-        // 1. Get the full audio file URL from Supabase Storage
-        // 2. Generate a signed URL with expiration
-        // 3. Return that URL or redirect to it
+        // Extract storage path from mp3_url
+        // mp3_url format: https://[project].supabase.co/storage/v1/object/public/songs/[path/to/file]
+        // We need [path/to/file] passed to from('songs')
+        const storagePath = song.mp3_url.split('/songs/').pop()
 
-        // For now, we'll redirect to the preview URL
-        // TODO: Replace with actual full audio file from Supabase Storage
-        return NextResponse.redirect(song.preview_url)
+        if (!storagePath) {
+            console.error('Failed to parse storage path from URL:', song.mp3_url)
+            return NextResponse.json(
+                { error: 'File path configuration error' },
+                { status: 500 }
+            )
+        }
+
+        // Generate a signed URL with short expiration (60 seconds)
+        // This prevents the URL from being shared effectively
+        const { data: signedData, error: signedError } = await supabase
+            .storage
+            .from('songs')
+            .createSignedUrl(storagePath, 60)
+
+        if (signedError || !signedData) {
+            console.error('Signed URL generation failed:', signedError)
+            return NextResponse.json(
+                { error: 'Failed to generate secure download link' },
+                { status: 500 }
+            )
+        }
+
+        return NextResponse.redirect(signedData.signedUrl)
     } catch (error) {
         console.error('Download error:', error)
         return NextResponse.json(

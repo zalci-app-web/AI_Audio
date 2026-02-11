@@ -111,9 +111,19 @@ function LoginContent() {
                         />
                     </div>
                     <div>
-                        <label className="mb-2 block text-sm font-medium text-gray-400">
-                            {dict.passwordLabel}
-                        </label>
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="text-sm font-medium text-gray-400">
+                                {dict.passwordLabel}
+                            </label>
+                            {!isSignUp && (
+                                <Link
+                                    href="/forgot-password"
+                                    className="text-xs text-blue-400 hover:text-blue-300 hover:underline"
+                                >
+                                    {dict.forgotPassword}
+                                </Link>
+                            )}
+                        </div>
                         <input
                             type="password"
                             required
@@ -167,8 +177,8 @@ function LoginContent() {
                         </Link>
                     </p>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
