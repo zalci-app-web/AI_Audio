@@ -73,7 +73,7 @@ export default async function Home() {
             <h2 className="mb-4 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 sm:text-4xl">
               {dict.featured.title}
             </h2>
-            <p className="mx-auto max-w-2xl text-gray-400">
+            <p className="mx-auto max-w-2xl text-gray-400 whitespace-pre-line">
               {dict.featured.description}
             </p>
           </div>

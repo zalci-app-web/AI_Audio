@@ -1,17 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { dictionaries } from '@/lib/dictionaries'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 
-export function ContactForm() {
-    // Ideally we would detect locale, but for now defaulting to 'ja' as per assumption
-    const dict = dictionaries['ja']
+interface ContactFormProps {
+    dict: any // Ideally type this properly, e.g. typeof dictionaries['en']['contact']
+}
 
+export function ContactForm({ dict }: ContactFormProps) {
     const [email, setEmail] = useState('')
     const [subject, setSubject] = useState('')
     const [otherDetail, setOtherDetail] = useState('')
@@ -57,17 +57,17 @@ export function ContactForm() {
         <div className="space-y-6">
             <div className="space-y-2 text-center">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                    {dict.contact.title}
+                    {dict.title}
                 </h1>
                 <p className="text-muted-foreground">
-                    {dict.contact.description}
+                    {dict.description}
                 </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                     <Label htmlFor="email">
-                        {dict.contact.form.email} <span className="text-red-500">*</span>
+                        {dict.form.email} <span className="text-red-500">*</span>
                     </Label>
                     <Input
                         id="email"
@@ -81,18 +81,18 @@ export function ContactForm() {
 
                 <div className="space-y-2">
                     <Label htmlFor="subject">
-                        {dict.contact.form.subject} <span className="text-red-500">*</span>
+                        {dict.form.subject} <span className="text-red-500">*</span>
                     </Label>
                     <Select value={subject} onValueChange={setSubject} required>
                         <SelectTrigger>
-                            <SelectValue placeholder={dict.contact.form.subject} />
+                            <SelectValue placeholder={dict.form.subject} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="general">{dict.contact.form.subjectOptions.general}</SelectItem>
-                            <SelectItem value="bug">{dict.contact.form.subjectOptions.bug}</SelectItem>
-                            <SelectItem value="purchase">{dict.contact.form.subjectOptions.purchase}</SelectItem>
-                            <SelectItem value="request">{dict.contact.form.subjectOptions.request}</SelectItem>
-                            <SelectItem value="other">{dict.contact.form.subjectOptions.other}</SelectItem>
+                            <SelectItem value="general">{dict.form.subjectOptions.general}</SelectItem>
+                            <SelectItem value="bug">{dict.form.subjectOptions.bug}</SelectItem>
+                            <SelectItem value="purchase">{dict.form.subjectOptions.purchase}</SelectItem>
+                            <SelectItem value="request">{dict.form.subjectOptions.request}</SelectItem>
+                            <SelectItem value="other">{dict.form.subjectOptions.other}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -100,7 +100,7 @@ export function ContactForm() {
                 {subject === 'other' && (
                     <div className="space-y-2">
                         <Label htmlFor="otherDetail">
-                            {dict.contact.form.otherDetail}
+                            {dict.form.otherDetail}
                         </Label>
                         <Input
                             id="otherDetail"
@@ -112,7 +112,7 @@ export function ContactForm() {
 
                 <div className="space-y-2">
                     <Label htmlFor="message">
-                        {dict.contact.form.message} <span className="text-red-500">*</span>
+                        {dict.form.message} <span className="text-red-500">*</span>
                     </Label>
                     <Textarea
                         id="message"
@@ -125,18 +125,18 @@ export function ContactForm() {
 
                 {status === 'success' && (
                     <div className="p-4 rounded-md bg-green-500/10 text-green-500 text-sm">
-                        {dict.contact.form.success}
+                        {dict.form.success}
                     </div>
                 )}
 
                 {status === 'error' && (
                     <div className="p-4 rounded-md bg-red-500/10 text-red-500 text-sm">
-                        {dict.contact.form.error}
+                        {dict.form.error}
                     </div>
                 )}
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? dict.contact.form.sending : dict.contact.form.submit}
+                    {isLoading ? dict.form.sending : dict.form.submit}
                 </Button>
             </form>
         </div>

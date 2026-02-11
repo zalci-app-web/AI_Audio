@@ -19,7 +19,7 @@ export default async function MyPage() {
     return (
         <div className="flex min-h-screen flex-col">
             <Header dict={dict.header} notifications={dict.notifications} />
-            <main className="flex-1 container max-w-2xl py-12 md:py-24">
+            <main className="flex-1 container max-w-2xl py-12 md:py-24 md:pl-20">
                 <div className="space-y-6">
                     <div className="space-y-2">
                         <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl">

@@ -52,6 +52,31 @@ export function AccountSettings({ dict, email }: AccountSettingsProps) {
             setIsDeleting(false)
         }
     }
+    const [isSendingReset, setIsSendingReset] = useState(false)
+
+    const handleChangePassword = async () => {
+        setIsSendingReset(true)
+        try {
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/auth/callback?next=/update-password`,
+            })
+            if (error) throw error
+            alert(dict.passwordResetEmailSent)
+        } catch (error: any) {
+            console.error(error)
+            if (
+                error.message?.includes('security purposes') ||
+                error.message?.includes('rate limit') ||
+                error.status === 429
+            ) {
+                alert(dict.rateLimitError)
+            } else {
+                alert(dict.passwordResetError)
+            }
+        } finally {
+            setIsSendingReset(false)
+        }
+    }
 
     return (
         <div className="space-y-8">
@@ -69,6 +94,9 @@ export function AccountSettings({ dict, email }: AccountSettingsProps) {
 
             <div className="space-y-4 pt-4 border-t">
                 <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+                    <Button variant="outline" onClick={handleChangePassword} disabled={isSendingReset}>
+                        <span>{isSendingReset ? '...' : dict.changePassword}</span>
+                    </Button>
                     <Button variant="outline" onClick={handleSignOut}>
                         {dict.logout}
                     </Button>
@@ -76,7 +104,7 @@ export function AccountSettings({ dict, email }: AccountSettingsProps) {
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" disabled={isDeleting}>
-                                {isDeleting ? '...' : dict.deleteAccount}
+                                <span>{isDeleting ? '...' : dict.deleteAccount}</span>
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
