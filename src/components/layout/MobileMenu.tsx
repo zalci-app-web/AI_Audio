@@ -2,9 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'
+import { createBrowserClient } from '@supabase/ssr'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 
 interface MobileMenuProps {
     dict: any
@@ -13,6 +16,18 @@ interface MobileMenuProps {
 
 export function MobileMenu({ dict, user }: MobileMenuProps) {
     const [open, setOpen] = useState(false)
+    const router = useRouter()
+    const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut()
+        setOpen(false)
+        router.push('/')
+        router.refresh()
+    }
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -23,6 +38,9 @@ export function MobileMenu({ dict, user }: MobileMenuProps) {
                 </Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-zinc-950 border-zinc-800">
+                <VisuallyHidden>
+                    <SheetTitle>Mobile Menu</SheetTitle>
+                </VisuallyHidden>
                 <nav className="flex flex-col space-y-4 mt-8">
                     <Link
                         href="/"
@@ -77,16 +95,20 @@ export function MobileMenu({ dict, user }: MobileMenuProps) {
                     <div className="h-px bg-white/10 my-4" />
 
                     {user ? (
-                        <>
+                        <div className="flex flex-col space-y-3">
                             <Link href="/library" onClick={() => setOpen(false)}>
                                 <Button className="w-full" variant="secondary">
                                     {dict.myPage}
                                 </Button>
                             </Link>
-                            {/* Sign out is usually handled by server action or a separate button, 
-                                but in mobile menu we might want a link or button. 
-                                For now, keeping it simple with My Page. */}
-                        </>
+                            <Button
+                                className="w-full"
+                                variant="outline"
+                                onClick={handleSignOut}
+                            >
+                                {dict.signOut}
+                            </Button>
+                        </div>
                     ) : (
                         <div className="flex flex-col space-y-3">
                             <Link href="/login" onClick={() => setOpen(false)}>

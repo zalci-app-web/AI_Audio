@@ -123,6 +123,7 @@ export const dictionaries = {
             errorTitle: 'Authentication Error',
             loggedIn: 'Logged In',
             forgotPassword: 'Forgot Password?',
+            backToHome: 'Back to Home',
         },
         forgotPassword: {
             title: 'Reset Password',
@@ -343,6 +344,7 @@ export const dictionaries = {
             errorTitle: '認証エラー',
             loggedIn: 'ログイン済み',
             forgotPassword: 'パスワードをお忘れですか？',
+            backToHome: 'ホームに戻る',
         },
         forgotPassword: {
             title: 'パスワードのリセット',

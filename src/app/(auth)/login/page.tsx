@@ -173,7 +173,7 @@ function LoginContent() {
                     </button>
                     <p className="mt-4 text-xs text-gray-600">
                         <Link href="/" className="hover:text-gray-400">
-                            &larr; Back to Home
+                            &larr; {dict.backToHome}
                         </Link>
                     </p>
                 </div>
