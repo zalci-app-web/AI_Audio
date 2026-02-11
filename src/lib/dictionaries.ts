@@ -242,6 +242,19 @@ export const dictionaries = {
                 error: 'Failed to send message. Please try again.',
                 required: 'Required',
             }
+        },
+        myPage: {
+            title: 'My Page',
+            accountSettings: 'Account Settings',
+            email: 'Email Address',
+            logout: 'Sign Out',
+            deleteAccount: 'Delete Account',
+            deleteConfirmTitle: 'Delete Account',
+            deleteConfirmDescription: 'Are you sure you want to delete your account? This action cannot be undone.',
+            deleteConfirmButton: 'Delete Account',
+            cancel: 'Cancel',
+            deleteSuccess: 'Account deleted successfully.',
+            deleteError: 'Failed to delete account.',
         }
     },
     ja: {
@@ -493,6 +506,19 @@ export const dictionaries = {
                 error: '送信に失敗しました。時間をおいて再度お試しください。',
                 required: '必須項目です',
             }
+        },
+        myPage: {
+            title: 'マイページ',
+            accountSettings: 'アカウント設定',
+            email: 'メールアドレス',
+            logout: 'ログアウト',
+            deleteAccount: 'アカウント削除',
+            deleteConfirmTitle: 'アカウント削除',
+            deleteConfirmDescription: '本当にアカウントを削除しますか？この操作は取り消せません。',
+            deleteConfirmButton: '削除する',
+            cancel: 'キャンセル',
+            deleteSuccess: 'アカウントを削除しました。',
+            deleteError: 'アカウントの削除に失敗しました。',
         }
     }
 }

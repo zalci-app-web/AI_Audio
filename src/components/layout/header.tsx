@@ -76,7 +76,7 @@ export async function Header({ dict, notifications }: HeaderProps) {
                     <nav className="flex items-center space-x-4">
                         <LanguageSwitcher />
                         {user ? (
-                            <Link href="/library">
+                            <Link href="/mypage">
                                 <Button variant="secondary" size="sm">
                                     {t.myPage}
                                 </Button>

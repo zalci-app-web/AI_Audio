@@ -96,7 +96,7 @@ export function MobileMenu({ dict, user }: MobileMenuProps) {
 
                     {user ? (
                         <div className="flex flex-col space-y-3">
-                            <Link href="/library" onClick={() => setOpen(false)}>
+                            <Link href="/mypage" onClick={() => setOpen(false)}>
                                 <Button className="w-full" variant="secondary">
                                     {dict.myPage}
                                 </Button>
