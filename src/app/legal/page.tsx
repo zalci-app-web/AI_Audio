@@ -4,6 +4,19 @@ import { getDictionary } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
 
+import type { Metadata } from 'next'
+
+export async function generateMetadata(): Promise<Metadata> {
+    return {
+        title: '特定商取引法に基づく表記 | Zalci Audio',
+        description: 'Zalci Audioの特定商取引法に基づく表記ページです。',
+        robots: {
+            index: true,
+            follow: true,
+        },
+    }
+}
+
 export default async function LegalPage() {
     const dict = await getDictionary()
 
