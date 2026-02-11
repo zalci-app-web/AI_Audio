@@ -15,6 +15,9 @@ export function Footer() {
                     <Link href="/legal" className="hover:text-white transition-colors">
                         特定商取引法に基づく表記
                     </Link>
+                    <Link href="/contact" className="hover:text-white transition-colors">
+                        お問い合わせ
+                    </Link>
                 </nav>
             </div>
         </footer>

@@ -219,7 +219,29 @@ export const dictionaries = {
                     title: 'Article 10 (Contact Information)',
                     content: 'For inquiries regarding this policy, please contact the following:\n\nSeller: Zalci Audio\nExample Email: zalciapp@gmail.com\nAddress/Phone: Please refer to the "Specific Commercial Transactions" page.'
                 }
-            ]
+            ],
+        },
+        contact: {
+            title: 'Contact Us',
+            description: 'If you have any questions or feedback, please contact us using the form below.',
+            form: {
+                email: 'Email Address',
+                subject: 'Subject',
+                subjectOptions: {
+                    general: 'General Inquiry',
+                    bug: 'Bug Report',
+                    purchase: 'Purchase/Payment Issue',
+                    request: 'Feature Request',
+                    other: 'Other',
+                },
+                otherDetail: 'Please specify',
+                message: 'Message Details',
+                submit: 'Send Message',
+                sending: 'Sending...',
+                success: 'Message sent successfully. We will get back to you shortly.',
+                error: 'Failed to send message. Please try again.',
+                required: 'Required',
+            }
         }
     },
     ja: {
@@ -449,6 +471,29 @@ export const dictionaries = {
                     content: '本ポリシーに関するお問い合わせは、下記の窓口までお願いいたします。\n\n販売業者: Zalci Audio\nメールアドレス: zalciapp@gmail.com\n住所・電話番号: 「特定商取引法に基づく表記」ページをご参照ください。'
                 }
             ]
+        },
+        contact: {
+            title: 'お問い合わせ',
+            description: 'ご質問やフィードバック等がございましたら、以下のフォームよりお気軽にお問い合わせください。',
+            form: {
+                email: 'メールアドレス',
+                subject: 'お問い合わせ内容',
+                subjectOptions: {
+                    general: '一般的なご質問',
+                    bug: '不具合の報告',
+                    purchase: '購入・決済について',
+                    request: '機能リクエスト',
+                    other: 'その他',
+                },
+                otherDetail: '内容を簡潔にご記入ください',
+                message: '詳細内容',
+                submit: '送信する',
+                sending: '送信中...',
+                success: 'お問い合わせを受け付けました。返信まで今しばらくお待ちください。',
+                error: '送信に失敗しました。時間をおいて再度お試しください。',
+                required: '必須項目です',
+            }
         }
-    },
+    }
 }
+
