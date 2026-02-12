@@ -127,7 +127,7 @@ export const dictionaries = {
             createAccountDesc: 'Enter your details to create a new account',
             backToHome: 'Back to Home',
             newsletterLabel: 'I would like to receive updates and promotional emails',
-            signUpSuccess: 'Registration completed. Please log in.',
+            signUpSuccess: 'Nice to meet you. Registration completed. Please log in.',
             errors: {
                 invalidCredentials: 'Invalid login credentials.',
                 userExists: 'User already registered.',
@@ -469,11 +469,11 @@ export const dictionaries = {
             loginLink: 'ログイン',
             welcome: 'おかえりなさい',
             welcomeDesc: 'アカウントにアクセスするには情報を入力してください',
-            createAccount: 'アカウント作成',
+            createAccount: 'はじめまして',
             createAccountDesc: '新しいアカウントを作成するには情報を入力してください',
             backToHome: 'ホームに戻る',
             newsletterLabel: 'メールマガジンの配信を希望する',
-            signUpSuccess: 'ユーザー登録が完了しました。ログインしてください。',
+            signUpSuccess: 'はじめまして。ユーザー登録が完了しました。ログインしてください。',
             errors: {
                 invalidCredentials: 'メールアドレスまたはパスワードが正しくありません。',
                 userExists: 'このメールアドレスは既に登録されています。',
