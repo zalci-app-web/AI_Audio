@@ -54,7 +54,10 @@ function LoginContent() {
                     },
                 })
                 if (error) throw error
-                setSuccessMessage(dict.welcomeDesc)
+                // Force logout just in case session was created
+                await supabase.auth.signOut()
+                setIsSignUp(false)
+                setSuccessMessage(dict.signUpSuccess)
             } else {
                 const { error } = await supabase.auth.signInWithPassword({
                     email,

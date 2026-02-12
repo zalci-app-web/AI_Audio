@@ -127,6 +127,7 @@ export const dictionaries = {
             createAccountDesc: 'Enter your details to create a new account',
             backToHome: 'Back to Home',
             newsletterLabel: 'I would like to receive updates and promotional emails',
+            signUpSuccess: 'Registration completed. Please log in.',
         },
         forgotPassword: {
             title: 'Reset Password',
@@ -454,6 +455,7 @@ export const dictionaries = {
             createAccountDesc: '新しいアカウントを作成するには情報を入力してください',
             backToHome: 'ホームに戻る',
             newsletterLabel: 'メールマガジンの配信を希望する',
+            signUpSuccess: 'ユーザー登録が完了しました。ログインしてください。',
         },
         forgotPassword: {
             title: 'パスワードのリセット',

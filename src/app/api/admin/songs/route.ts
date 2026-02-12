@@ -10,10 +10,12 @@ export async function POST(req: NextRequest) {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
 
-        if (!user) {
+        const adminUserId = process.env.ADMIN_USER_ID
+
+        if (!user || (adminUserId && user.id !== adminUserId)) {
             return NextResponse.json(
                 { error: 'Unauthorized' },
-                { status: 401 }
+                { status: 403 }
             )
         }
 
@@ -101,10 +103,12 @@ export async function DELETE(req: NextRequest) {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
 
-        if (!user) {
+        const adminUserId = process.env.ADMIN_USER_ID
+
+        if (!user || (adminUserId && user.id !== adminUserId)) {
             return NextResponse.json(
                 { error: 'Unauthorized' },
-                { status: 401 }
+                { status: 403 }
             )
         }
 

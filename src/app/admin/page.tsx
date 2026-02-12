@@ -10,9 +10,11 @@ export default async function AdminPage() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Check if user is authenticated
-    if (!user) {
-        redirect('/login')
+    // Check if user is authenticated and is admin
+    const adminUserId = process.env.ADMIN_USER_ID
+
+    if (!user || (adminUserId && user.id !== adminUserId)) {
+        redirect('/')
     }
 
     // Fetch all songs
