@@ -66,6 +66,13 @@ export default async function Home() {
       <Header dict={dict.header} notifications={dict.notifications} />
 
       <main className="flex-1">
+        {/* Campaign Banner */}
+        <div className="bg-gradient-to-r from-yellow-600 to-orange-600 px-4 py-3 text-white">
+          <p className="text-center text-sm font-bold md:text-base">
+            🎉 Stripe審査中につき、全曲無料配布キャンペーン実施中！ (今のうちにダウンロード！)
+          </p>
+        </div>
+
         <Hero dict={dict.hero} user={user} />
 
         <section className="container mx-auto px-4 py-16">

@@ -28,7 +28,13 @@ function LoginContent() {
         // Check cookie or simple detection
         const isJa = document.cookie.includes('NEXT_LOCALE=ja') || navigator.language.startsWith('ja')
         setDict(isJa ? dictionaries.ja.login : dictionaries.en.login)
-    }, [])
+
+        if (searchParams.get('registered') === 'true') {
+            setSuccessMessage(isJa ? dictionaries.ja.login.signUpSuccess : dictionaries.en.login.signUpSuccess)
+            // Optional: Clean up URL
+            // router.replace('/login') 
+        }
+    }, [searchParams])
 
     const supabase = createBrowserClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -37,8 +43,6 @@ function LoginContent() {
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault()
-        setIsLoading(true)
-        setError(null)
         setSuccessMessage(null)
 
         try {
@@ -56,8 +60,10 @@ function LoginContent() {
                 if (error) throw error
                 // Force logout just in case session was created
                 await supabase.auth.signOut()
-                setIsSignUp(false)
-                setSuccessMessage(dict.signUpSuccess)
+
+                // Redirect to login page with success flag
+                router.push('/login?registered=true')
+                router.refresh()
             } else {
                 const { error } = await supabase.auth.signInWithPassword({
                     email,

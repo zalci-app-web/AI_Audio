@@ -382,7 +382,7 @@ export const dictionaries = {
             error: 'エラーが発生しました。もう一度お試しください。',
             inLibrary: '保有済み',
             free: '無料',
-            freeDownload: '無料期間',
+            freeDownload: '無料ダウンロード',
         },
         sounds: {
             title: '全サウンド一覧',

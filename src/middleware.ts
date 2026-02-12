@@ -48,8 +48,12 @@ export async function middleware(request: NextRequest) {
             !user &&
             !request.nextUrl.pathname.startsWith('/login') &&
             !request.nextUrl.pathname.startsWith('/auth') &&
+            request.nextUrl.pathname !== '/' && // Allow root
+            request.nextUrl.pathname !== '/legal' && // Allow legal
+            request.nextUrl.pathname !== '/pricing' && // Allow pricing
             (request.nextUrl.pathname.startsWith('/library') ||
-                request.nextUrl.pathname.startsWith('/mypage'))
+                request.nextUrl.pathname.startsWith('/mypage') ||
+                request.nextUrl.pathname.startsWith('/admin')) // Explicitly protect admin
         ) {
             const url = request.nextUrl.clone()
             url.pathname = '/login'

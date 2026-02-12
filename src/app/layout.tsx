@@ -15,13 +15,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AudioStore - AI Generated Music Library",
-  description: "Zalci Audioによる高品質なAI生成BGM素材のダウンロードサイト。ゲーム・動画制作に。",
+  description: "Zalci AudioによるAI生成BGMライブラリ。ゲーム開発や動画制作に最適な高品質な楽曲を公開中。",
+  keywords: ["AI音楽", "BGM素材", "ゲーム開発", "Zalci Audio", "無料配布"],
   icons: {
     icon: '/favicon.png',
   },
   openGraph: {
     title: "AudioStore - AI Generated Music Library",
-    description: "Zalci Audioによる高品質なAI生成BGM素材のダウンロードサイト。ゲーム・動画制作に。",
+    description: "Zalci AudioによるAI生成BGMライブラリ。ゲーム開発や動画制作に最適な高品質な楽曲を公開中。",
     url: "https://audiostore.zalci.net",
     siteName: "Zalci Audio",
     images: [

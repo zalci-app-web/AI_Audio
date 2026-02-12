@@ -142,6 +142,11 @@ export function AddSongForm() {
     }
 
     if (!isOpen) {
+        // Admin check should be done by parent or we need to pass user/admin status. 
+        // However, for strict security, we should check it here or in parent.
+        // For now, let's assume parent controls visibility or we add a check.
+        // UPDATE: User requested "UI Control: Hide ... for non-admins".
+        // We will accept an isAdmin prop.
         return (
             <Button
                 onClick={() => setIsOpen(true)}
