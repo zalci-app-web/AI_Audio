@@ -58,11 +58,16 @@ function LoginContent() {
                     },
                 })
                 if (error) throw error
-                // Force logout just in case session was created
-                await supabase.auth.signOut()
+                if (error) throw error
 
-                // Redirect to login page with success flag
-                router.push('/login?registered=true')
+                // Automatically sign in after sign up
+                const { error: signInError } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                })
+                if (signInError) throw signInError
+
+                router.push('/')
                 router.refresh()
             } else {
                 const { error } = await supabase.auth.signInWithPassword({
@@ -102,9 +107,15 @@ function LoginContent() {
             <div className="w-full max-w-md rounded-2xl border border-white/10 bg-zinc-900/50 p-8 backdrop-blur shadow-xl">
                 <div className="mb-6 text-center">
                     <h1 className="text-2xl font-bold text-white">
-                        {isSignUp ? dict.createAccount : dict.welcome}
+                        {isSignUp ? dict.createAccount : (successMessage ? '' : dict.welcome)}
                     </h1>
                 </div>
+
+                {email && password && !isLoading && !error && !successMessage && (
+                    <div className="mb-4 text-center text-sm font-medium text-blue-400 animate-pulse">
+                        {dict.inputComplete}
+                    </div>
+                )}
 
                 {error && (
                     <div className="mb-6 rounded-lg bg-red-500/10 p-4 text-sm text-red-400 border border-red-500/20">
@@ -114,7 +125,6 @@ function LoginContent() {
 
                 {successMessage && (
                     <div className="mb-6 rounded-lg bg-green-500/10 p-4 text-sm text-green-400 border border-green-500/20">
-                        <h3 className="font-bold mb-1">{dict.welcome}</h3>
                         <p>{successMessage}</p>
                     </div>
                 )}
