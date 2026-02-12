@@ -74,7 +74,17 @@ function LoginContent() {
                 router.refresh()
             }
         } catch (e: any) {
-            setError(e.message)
+            const msg = e.message || ''
+            if (msg.includes('Invalid login credentials')) {
+                setError(dict.errors.invalidCredentials)
+            } else if (msg.includes('User already registered')) {
+                setError(dict.errors.userExists)
+            } else if (msg.includes('Password should be at least 6 characters')) {
+                setError(dict.errors.weakPassword)
+            } else {
+                setError(dict.errors.unknown)
+                console.error('Auth Error:', e)
+            }
         } finally {
             setIsLoading(false)
         }

@@ -128,6 +128,12 @@ export const dictionaries = {
             backToHome: 'Back to Home',
             newsletterLabel: 'I would like to receive updates and promotional emails',
             signUpSuccess: 'Registration completed. Please log in.',
+            errors: {
+                invalidCredentials: 'Invalid login credentials.',
+                userExists: 'User already registered.',
+                weakPassword: 'Password should be at least 6 characters.',
+                unknown: 'An unexpected error occurred.',
+            },
         },
         forgotPassword: {
             title: 'Reset Password',
@@ -138,6 +144,12 @@ export const dictionaries = {
             successTitle: 'Check your email',
             successDesc: 'If an account exists for that email, we have sent a password reset link.',
             loading: 'Sending...',
+            errors: {
+                invalidEmail: 'Please enter a valid email address.',
+                userNotFound: 'If an account exists, a link has been sent.',
+                rateLimit: 'Too many requests. Please try again later.',
+                unknown: 'An error occurred. Please try again.',
+            }
         },
         updatePassword: {
             title: 'Update Password',
@@ -149,6 +161,11 @@ export const dictionaries = {
             successDesc: 'Your password has been changed successfully.',
             matchError: 'Passwords do not match.',
             loading: 'Updating...',
+            errors: {
+                weakPassword: 'Password should be at least 6 characters.',
+                sessionExpired: 'Session expired. Please request a new link.',
+                unknown: 'An error occurred. Please try again.',
+            }
         },
         terms: {
             title: 'Terms of Service',
@@ -163,7 +180,7 @@ export const dictionaries = {
                 },
                 {
                     title: 'Article 3 (Prohibited Acts)',
-                    content: 'Users shall not engage in the following acts when using the Service.\n\nRedistribution/Resale: Redistributing, reselling, lending, or transferring the Assets themselves, or Assets with only minor processing, as standalone files to third parties (including selling as BGM collections, registering on asset sales sites, etc.).\n\nRegistration with Copyright Management Systems: Registering Assets, or Deliverables using Assets, with copyright management organizations such as YouTube Content ID, JASRAC, or similar copyright management systems/databases.\n\nUse for AI Learning: Using Assets as training data for generative AI (artificial intelligence), and intentionally generating similar audio using generative AI using the Assets.\n\nUnauthorized Use: Using Assets for purposes contrary to public order and morals, criminal acts, activities related to anti-social forces, or purposes that infringe on the rights of others.\n\nAccount Sharing: Sharing one account with multiple people, or transferring or lending account information to a third party.'
+                    content: 'Users shall not engage in the following acts when using the Service.\n\nRedistribution/Resale: Redistributing, reselling, lending, or transferring the Assets themselves, or Assets with only minor processing, as standalone files to third parties (including selling as BGM collections, registering on asset sales sites, etc.).\n\n著作権管理システムへの登録: 素材、または素材を使用した成果物を、YouTube Content ID、JASRAC等の著作権管理団体、またはこれらに類する著作権管理システム・データベースに登録する行為。\n\nUse for AI Learning: Using Assets as training data for generative AI (artificial intelligence), and intentionally generating similar audio using generative AI using the Assets.\n\nUnauthorized Use: Using Assets for purposes contrary to public order and morals, criminal acts, activities related to anti-social forces, or purposes that infringe on the rights of others.\n\nAccount Sharing: Sharing one account with multiple people, or transferring or lending account information to a third party.'
                 },
                 {
                     title: 'Article 4 (Returns, Cancellations, and Redownloads)',
@@ -427,6 +444,7 @@ export const dictionaries = {
             purchaseOptions: '購入オプション',
             totalAmount: '合計金額',
             payWithStripe: 'Stripeで支払う',
+            purchaseWithFree: '無料ダウンロード',
             processing: '処理中...',
             securedBy: 'Stripeによる安全な決済',
             options: {
@@ -456,6 +474,12 @@ export const dictionaries = {
             backToHome: 'ホームに戻る',
             newsletterLabel: 'メールマガジンの配信を希望する',
             signUpSuccess: 'ユーザー登録が完了しました。ログインしてください。',
+            errors: {
+                invalidCredentials: 'メールアドレスまたはパスワードが正しくありません。',
+                userExists: 'このメールアドレスは既に登録されています。',
+                weakPassword: 'パスワードは6文字以上で入力してください。',
+                unknown: '予期せぬエラーが発生しました。',
+            },
         },
         forgotPassword: {
             title: 'パスワードのリセット',
@@ -466,6 +490,12 @@ export const dictionaries = {
             successTitle: 'メールを確認してください',
             successDesc: 'アカウントが存在する場合、パスワードリセット用リンクを送信しました。',
             loading: '送信中...',
+            errors: {
+                invalidEmail: '有効なメールアドレスを入力してください。',
+                userNotFound: 'アカウントが存在する場合、リンクを送信しました。',
+                rateLimit: 'リクエストが多すぎます。しばらく時間をおいてお試しください。',
+                unknown: 'エラーが発生しました。もう一度お試しください。',
+            }
         },
         updatePassword: {
             title: 'パスワードの更新',
@@ -477,6 +507,11 @@ export const dictionaries = {
             successDesc: 'パスワードが正常に変更されました。',
             matchError: 'パスワードが一致しません。',
             loading: '更新中...',
+            errors: {
+                weakPassword: 'パスワードは6文字以上で入力してください。',
+                sessionExpired: 'セッションの期限が切れました。再度リセットリンクをリクエストしてください。',
+                unknown: 'エラーが発生しました。もう一度お試しください。',
+            }
         },
         terms: {
             title: '利用規約',
@@ -529,7 +564,7 @@ export const dictionaries = {
                 },
                 {
                     title: '第3条（情報の管理とセキュリティ）',
-                    content: 'パスワードの保護: 当サイトは、ユーザーが作成したアカウントのメールアドレスおよびパスワードを収集・保持します。パスワードについては、適切なハッシュ化アルゴリズム（ソルト付与等）を用いて暗号化した状態で保存し、当サイト運営者であっても元のパスワードを閲覧・復元できない仕組みを導入し、厳重に管理いたします。\n\n安全管理措置: 当サイトは、個人情報の漏洩、滅失または毀損の防止その他の個人情報の安全管理のために、SSL（Secure Sockets Layer）による通信の暗号化や、不正アクセス防止のための適切な技術的対策を講じます。\n\nユーザーの責任: ユーザーは、自己のパスワードを第三者に知られないよう、適切に管理する責任を負うものとします。パスワードの推測が容易な文字列の使用や、他サイトとの使い回しを避けることを強く推奨します。'
+                    content: 'パスワードの保護: 当サイトは、ユーザーが作成したアカウントのメールアドレスおよびパスワードを収集・保持します。パスワードについては、適切なハッシュ化アルゴリズム（ソルト付与等）を用いて暗号化した状態で保存し、当サイト運営者であっても元のパスワードを閲覧・復元できない仕組みを導入し、厳重に管理いたします。\n\n安全管理措置: 当サイトは、個人情報の漏洩、滅失または毀損の防止その他の個人情報の安全管理のために、SSL（Secure Sockets Layer）による通信の暗号化や、不正アクセス防止のための技術的対策を講じます。\n\nユーザーの責任: ユーザーは、自己のパスワードを第三者に知られないよう、適切に管理する責任を負うものとします。パスワードの推測が容易な文字列の使用や、他サイトとの使い回しを避けることを強く推奨します。'
                 },
                 {
                     title: '第4条（個人情報の利用目的）',
@@ -553,7 +588,7 @@ export const dictionaries = {
                 },
                 {
                     title: '第9条（プライバシーポリシーの変更）',
-                    content: '本ポリシーの内容は、法令その他本ポリシーに別段の定めのある事項を除いて、ユーザーに通知することなく変更することができるものとします。当サイトが別途定める場合を除いて、変更後のプライバシーポリシーは、本ウェブサイトに掲載したときから効力を生じるものとします。'
+                    content: '本ポリシーの内容は、法令その他本ポリシーに別段の定めのある事項を除いて、ユーザーに通知することなく変更することができるものとします。当サイトが別途定める場合を除いて、変更後のプライバシーポリシーは、本ウェブサイトに掲載したときから効力を生じるものとする。'
                 },
                 {
                     title: '第10条（お問い合わせ窓口）',
@@ -658,4 +693,3 @@ export const dictionaries = {
         }
     }
 }
-

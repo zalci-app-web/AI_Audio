@@ -52,7 +52,15 @@ export default function UpdatePasswordPage() {
                 router.push('/')
             }, 3000)
         } catch (e: any) {
-            setError(e.message)
+            const msg = e.message || ''
+            if (msg.includes('at least 6 characters')) {
+                setError(dict.errors.weakPassword)
+            } else if (msg.includes('expired') || msg.includes('invalid link')) {
+                setError(dict.errors.sessionExpired)
+            } else {
+                setError(dict.errors.unknown)
+                console.error('Update Password Error:', e)
+            }
         } finally {
             setIsLoading(false)
         }

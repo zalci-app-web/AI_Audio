@@ -40,7 +40,15 @@ export default function ForgotPasswordPage() {
             if (error) throw error
             setSuccessMessage(dict.successDesc)
         } catch (e: any) {
-            setError(e.message)
+            const msg = e.message || ''
+            if (msg.includes('rate limit')) {
+                setError(dict.errors.rateLimit)
+            } else if (msg.includes('invalid email')) {
+                setError(dict.errors.invalidEmail)
+            } else {
+                setError(dict.errors.unknown)
+                console.error('Password Reset Error:', e)
+            }
         } finally {
             setIsLoading(false)
         }
