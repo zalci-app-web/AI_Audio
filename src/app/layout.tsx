@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono } from "next/font/google"; // Keep existing imports
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,14 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zalci Audio - Premier AI Audio Assets",
-  description: "High-quality, royalty-free AI generated audio assets for games, video, and streaming.",
+  title: "AudioStore - AI Generated Music Library",
+  description: "Zalci Audioによる高品質なAI生成BGM素材のダウンロードサイト。ゲーム・動画制作に。",
   icons: {
     icon: '/favicon.png',
   },
   openGraph: {
-    title: "Zalci Audio",
-    description: "Premier AI Audio Assets for Creators",
+    title: "AudioStore - AI Generated Music Library",
+    description: "Zalci Audioによる高品質なAI生成BGM素材のダウンロードサイト。ゲーム・動画制作に。",
     url: "https://audiostore.zalci.net",
     siteName: "Zalci Audio",
     images: [
@@ -33,6 +33,10 @@ export const metadata: Metadata = {
     ],
     locale: "ja_JP",
     type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
