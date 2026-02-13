@@ -50,6 +50,14 @@ export default async function LegalPage() {
                             ) : (
                                 <p>{dict.legal.address.content}</p>
                             )}
+                            {'requestButton' in dict.legal.address && (
+                                <a
+                                    href={`mailto:${dict.legal.email.content}?subject=${encodeURIComponent(dict.legal.address.requestButton as string)}`}
+                                    className="inline-block mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium"
+                                >
+                                    {dict.legal.address.requestButton as React.ReactNode}
+                                </a>
+                            )}
                         </section>
 
                         <section>

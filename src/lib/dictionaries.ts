@@ -302,7 +302,8 @@ export const dictionaries = {
             },
             address: {
                 title: 'Address',
-                content: ['106-0032', '5F Roppongi KS Bldg., 3-16-12 Roppongi, Minato-ku, Tokyo'],
+                content: 'Address will be disclosed without delay upon request.',
+                requestButton: 'Request Disclosure of Address/Name',
             },
             phone: {
                 title: 'Phone Number',
@@ -649,7 +650,8 @@ export const dictionaries = {
             },
             address: {
                 title: '住所',
-                content: ['〒106-0032', '東京都港区六本木3丁目16番12号 六本木KSビル5F'],
+                content: '請求があった場合に遅滞なく開示いたします。',
+                requestButton: '【住所・氏名の開示を請求する】',
             },
             phone: {
                 title: '電話番号',
