@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://audiostore.zalci.net'),
   title: "AudioStore - AI Generated Music Library",
   description: "Zalci AudioによるAI生成BGMライブラリ。ゲーム開発や動画制作に最適な高品質な楽曲を公開中。",
   keywords: ["AI音楽", "BGM素材", "ゲーム開発", "Zalci Audio", "無料配布"],
@@ -39,6 +40,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
 };
 
