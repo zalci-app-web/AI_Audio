@@ -135,6 +135,9 @@ export const dictionaries = {
                 weakPassword: 'Password should be at least 6 characters.',
                 unknown: 'An unexpected error occurred.',
             },
+            continueWith: 'Or continue with',
+            google: 'Google',
+            twitter: 'X',
         },
         forgotPassword: {
             title: 'Reset Password',
@@ -483,6 +486,9 @@ export const dictionaries = {
                 weakPassword: 'パスワードは6文字以上で入力してください。',
                 unknown: '予期せぬエラーが発生しました。',
             },
+            continueWith: 'または',
+            google: 'Google',
+            twitter: 'X',
         },
         forgotPassword: {
             title: 'パスワードのリセット',

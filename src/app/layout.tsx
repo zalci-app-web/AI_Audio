@@ -16,15 +16,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://audiostore.zalci.net'),
-  title: "AudioStore - AI Generated Music Library",
-  description: "Zalci AudioによるAI生成BGMライブラリ。ゲーム開発や動画制作に最適な高品質な楽曲を公開中。",
-  keywords: ["AI音楽", "BGM素材", "ゲーム開発", "Zalci Audio", "無料配布"],
+  title: "【全曲無料】AudioStore - 2月限定AI生成BGM配布中 | Zalci Audio",
+  description: "【2月中限定オープンセール！全曲無料配布実施中】Zalci AudioによるAI生成BGMライブラリ。RPG、バトル、ホラー、動画制作に最適な高品質な楽曲をダウンロードできます。",
+  keywords: ["AI音楽", "BGM素材", "全曲無料", "2月限定", "ゲーム開発", "Zalci Audio", "著作権フリー"],
   icons: {
     icon: '/favicon.png',
   },
   openGraph: {
-    title: "AudioStore - AI Generated Music Library",
-    description: "Zalci AudioによるAI生成BGMライブラリ。ゲーム開発や動画制作に最適な高品質な楽曲を公開中。",
+    title: "【全曲無料】AudioStore - 2月限定AI生成BGM配布中 | Zalci Audio",
+    description: "【2月中限定オープンセール！全曲無料配布実施中】Zalci AudioによるAI生成BGMライブラリ。RPG、バトル、ホラー、動画制作に最適な高品質な楽曲をダウンロードできます。",
     url: "https://audiostore.zalci.net",
     siteName: "Zalci Audio",
     images: [

@@ -19,8 +19,19 @@ export function AddSongForm() {
     const [uploadProgress, setUploadProgress] = useState<string>('')
     const fileInputRef = useRef<HTMLInputElement>(null)
 
+    const [description, setDescription] = useState('')
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const [uploadResults, setUploadResults] = useState<{ name: string; status: 'pending' | 'success' | 'error'; message?: string }[]>([])
+
+    const TAGS = ["RPG", "Battle", "Horror", "Piano", "Unity", "Unreal", "Chill", "Electronic", "Orchestral"]
+
+    const addTag = (tag: string) => {
+        setDescription(prev => {
+            const trimmed = prev.trim()
+            if (trimmed.includes(tag)) return prev
+            return trimmed ? `${trimmed} ${tag}` : tag
+        })
+    }
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
@@ -100,7 +111,7 @@ export function AddSongForm() {
                     },
                     body: JSON.stringify({
                         title: title,
-                        // description is set default in backend/API
+                        description: description, // Apply same description/tags to all
                         mp3_url: mp3Url,
                         // Defaults
                         has_wav: false,
@@ -163,6 +174,30 @@ export function AddSongForm() {
             <h2 className="mb-6 text-2xl font-bold text-white">楽曲を追加 (MP3)</h2>
 
             <div className="space-y-6">
+                {/* Description / Tags Input */}
+                <div className="space-y-3">
+                    <label className="text-sm font-medium text-gray-300">
+                        説明 / タグ (全ファイル共通)
+                    </label>
+                    <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="楽曲の説明やタグを入力 (例: RPG Battle BossTheme)"
+                        className="w-full rounded-lg border border-white/10 bg-black/50 p-3 text-sm text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                        rows={2}
+                    />
+                    <div className="flex flex-wrap gap-2">
+                        {TAGS.map(tag => (
+                            <button
+                                key={tag}
+                                onClick={() => addTag(tag)}
+                                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300 hover:bg-blue-500/20 hover:text-blue-400 transition-colors"
+                            >
+                                + {tag}
+                            </button>
+                        ))}
+                    </div>
+                </div>
                 {/* File Input */}
                 <div className="rounded-lg border-2 border-dashed border-white/20 p-8 text-center hover:border-blue-500/50 transition-colors">
                     <input

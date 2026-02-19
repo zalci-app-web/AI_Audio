@@ -8,6 +8,7 @@ import { PurchaseModal } from './PurchaseModal'
 interface Song {
     id: string
     title: string
+    description?: string // Added
     price: number
     preview_url: string
     image_url: string
@@ -150,6 +151,9 @@ export function SongCard({ song, dict, user, isPurchased = false }: SongCardProp
                 <div className="relative mt-4 space-y-3">
                     <div>
                         <h3 className="text-lg font-bold text-white truncate">{song.title}</h3>
+                        {song.description && (
+                            <p className="text-xs text-gray-400 line-clamp-1 mb-1">{song.description}</p>
+                        )}
                         <div className="flex items-center gap-2">
                             <p className="text-sm text-gray-400 line-through">¥{song.price.toLocaleString()}</p>
                             <span className="text-sm font-bold text-green-400">{dict.free}</span>

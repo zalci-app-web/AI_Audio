@@ -63,6 +63,41 @@ export function MobileMenu({ dict, user }: MobileMenuProps) {
                     >
                         {user ? dict.myLibrary : dict.library}
                     </Link>
+
+                    <div className="pt-2 pb-2">
+                        <p className="text-sm text-muted-foreground mb-2 px-1">Categories:</p>
+                        <div className="grid grid-cols-2 gap-2">
+                            <Link
+                                href="/sounds?q=RPG"
+                                className="block rounded-md border border-white/10 bg-white/5 px-3 py-2 text-center text-sm hover:bg-white/10 hover:text-blue-400 transition-colors"
+                                onClick={() => setOpen(false)}
+                            >
+                                RPG
+                            </Link>
+                            <Link
+                                href="/sounds?q=Battle"
+                                className="block rounded-md border border-white/10 bg-white/5 px-3 py-2 text-center text-sm hover:bg-white/10 hover:text-red-400 transition-colors"
+                                onClick={() => setOpen(false)}
+                            >
+                                Battle
+                            </Link>
+                            <Link
+                                href="/sounds?q=Horror"
+                                className="block rounded-md border border-white/10 bg-white/5 px-3 py-2 text-center text-sm hover:bg-white/10 hover:text-purple-400 transition-colors"
+                                onClick={() => setOpen(false)}
+                            >
+                                Horror
+                            </Link>
+                            <Link
+                                href="/sounds?q=Piano"
+                                className="block rounded-md border border-white/10 bg-white/5 px-3 py-2 text-center text-sm hover:bg-white/10 hover:text-cyan-400 transition-colors"
+                                onClick={() => setOpen(false)}
+                            >
+                                Piano
+                            </Link>
+                        </div>
+                    </div>
+
                     <Link
                         href="/about"
                         className="text-lg font-semibold hover:text-blue-400 transition-colors"

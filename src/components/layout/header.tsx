@@ -53,18 +53,20 @@ export async function Header({ dict, notifications }: HeaderProps) {
                         <Link href="/library" className="transition-colors hover:text-foreground/80 text-foreground/60">
                             {user ? t.myLibrary : t.library}
                         </Link>
+
+                        {/* Quick Categories */}
+                        <div className="hidden lg:flex items-center gap-3 border-l border-white/10 pl-6 ml-2">
+                            <span className="text-xs text-muted-foreground">Focus:</span>
+                            <Link href="/sounds?q=RPG" className="text-xs text-muted-foreground hover:text-blue-400 transition-colors">RPG</Link>
+                            <Link href="/sounds?q=Battle" className="text-xs text-muted-foreground hover:text-red-400 transition-colors">Battle</Link>
+                            <Link href="/sounds?q=Horror" className="text-xs text-muted-foreground hover:text-purple-400 transition-colors">Horror</Link>
+                            <Link href="/sounds?q=Piano" className="text-xs text-muted-foreground hover:text-cyan-400 transition-colors">Piano</Link>
+                        </div>
+
                         <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60">
                             {t.about}
                         </Link>
-                        <Link href="/terms" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                            {t.terms}
-                        </Link>
-                        <Link href="/policy" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                            {t.privacy}
-                        </Link>
-                        <Link href="/legal" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                            {t.legal}
-                        </Link>
+                        {/* Other links moved or kept */}
                     </nav>
                 </div>
 
