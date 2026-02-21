@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Play, Pause, ShoppingCart, Music, Heart } from 'lucide-react'
+import { Play, Pause, ShoppingCart, Music, Heart, Twitter, Gift, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
 import { PurchaseModal } from './PurchaseModal'
 import { createClient } from '@/lib/supabase/client'
@@ -29,6 +29,10 @@ interface SongCardProps {
         inLibrary: string
         free: string
         freeDownload: string
+        shareOnX: string
+        shareClaim: string
+        shareAlreadyClaimed: string
+        shareCreditReceived: string
         purchaseModal: any
     }
     user?: any
@@ -42,6 +46,7 @@ export function SongCard({ song, dict, user, isPurchased = false, initialIsFavor
     const audioRef = useRef<HTMLAudioElement | null>(null)
     const [isFavorited, setIsFavorited] = useState(initialIsFavorited)
     const [isFavoriteLoading, setIsFavoriteLoading] = useState(false)
+    const [shareState, setShareState] = useState<'idle' | 'shared' | 'claiming' | 'claimed' | 'already_claimed'>('idle')
 
     // Quick inline for client component
     const useRouter = (require('next/navigation').useRouter)
@@ -160,6 +165,39 @@ export function SongCard({ song, dict, user, isPurchased = false, initialIsFavor
         }
     }
 
+    const handleShare = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+        const shareText = `${song.title} - AI生成BGM素材 🎵 #ZalciAudio #フリーBGM`
+        const shareUrl = `${siteUrl}/sounds`
+        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`
+        window.open(tweetUrl, '_blank', 'width=600,height=400')
+        // Show claim button after share window opens
+        setShareState('shared')
+    }
+
+    const handleShareClaim = async (e: React.MouseEvent) => {
+        e.stopPropagation()
+        if (!user) {
+            router.push('/login')
+            return
+        }
+        setShareState('claiming')
+        try {
+            const res = await fetch('/api/share/claim', { method: 'POST' })
+            if (res.status === 409) {
+                setShareState('already_claimed')
+                return
+            }
+            if (!res.ok) throw new Error()
+            setShareState('claimed')
+            // Reset after 4 seconds
+            setTimeout(() => setShareState('idle'), 4000)
+        } catch {
+            setShareState('idle')
+        }
+    }
+
     return (
         <>
             <div
@@ -260,6 +298,40 @@ export function SongCard({ song, dict, user, isPurchased = false, initialIsFavor
                             </>
                         )}
                     </button>
+
+                    {/* X Share Button + Credit Claim Flow */}
+                    <div className="space-y-2">
+                        {shareState === 'claimed' ? (
+                            <div className="flex items-center justify-center gap-2 w-full py-2 text-sm font-bold text-emerald-400 animate-in fade-in duration-300">
+                                <CheckCircle size={16} />
+                                {dict.shareCreditReceived}
+                            </div>
+                        ) : shareState === 'already_claimed' ? (
+                            <div className="flex items-center justify-center gap-2 w-full py-2 text-sm text-gray-500">
+                                <CheckCircle size={14} />
+                                {dict.shareAlreadyClaimed}
+                            </div>
+                        ) : (
+                            <button
+                                onClick={handleShare}
+                                className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-sky-400 border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 transition-all duration-200"
+                            >
+                                <Twitter size={14} />
+                                {dict.shareOnX}
+                            </button>
+                        )}
+
+                        {shareState === 'shared' && (
+                            <button
+                                onClick={handleShareClaim}
+                                disabled={shareState === 'claiming' as any}
+                                className="flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-indigo-300 border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all animate-in fade-in slide-in-from-bottom-1 duration-300"
+                            >
+                                <Gift size={14} />
+                                {dict.shareClaim}
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 {/* Audio Element */}

@@ -55,6 +55,10 @@ export const dictionaries = {
             inLibrary: 'In Library',
             free: 'FREE',
             freeDownload: 'Free Download',
+            shareOnX: 'Share on X',
+            shareClaim: 'Claim Free Credit',
+            shareAlreadyClaimed: 'Already Claimed This Week',
+            shareCreditReceived: '🎉 +1 Free Credit Received!',
         },
         sounds: {
             title: 'All Sounds',
@@ -447,6 +451,10 @@ export const dictionaries = {
             inLibrary: '保有済み',
             free: '無料',
             freeDownload: '無料ダウンロード',
+            shareOnX: 'Xでシェア',
+            shareClaim: '無料枠を受け取る',
+            shareAlreadyClaimed: '今週はすでに受け取り済み',
+            shareCreditReceived: '🎉 無料枠+1獲得！',
         },
         sounds: {
             title: '全サウンド一覧',
