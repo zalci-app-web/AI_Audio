@@ -278,6 +278,42 @@ export const dictionaries = {
         },
         myPage: {
             title: 'My Page',
+            subtitle: 'Manage your creative arsenal and account settings.',
+            tabs: {
+                arsenal: 'Your Arsenal',
+                favorites: 'Favorites',
+                settings: 'Settings'
+            },
+            arsenal: {
+                title: 'Your Arsenal',
+                subtitle: 'Acquired assets ready for your next project.',
+                emptyTitle: 'Your Arsenal is Empty',
+                emptyDesc: 'Discover and acquire new sounds to build your collection.',
+                acquired: 'Acquired',
+                downloadMp3: 'MP3',
+                downloadWav: 'WAV',
+                downloadStems: 'STEMS',
+            },
+            favorites: {
+                title: 'Saved Favorites',
+                subtitle: 'Your curated collection of inspiring sounds.',
+                emptyTitle: 'No Favorites Yet',
+                emptyDesc: 'Discover sounds that inspire you and save them to your collection for your next creative project.',
+                browseButton: 'Browse Library',
+            },
+            badges: {
+                currentTitle: 'Current Title',
+                assetsAcquired: 'Assets Acquired',
+                nextRankAt: 'Next Rank At',
+                downloads: 'Downloads',
+                maxRank: 'MAX RANK',
+                titles: {
+                    legendary: 'Legendary Composer',
+                    master: 'Sound Master',
+                    rising: 'Rising Creator',
+                    novice: 'Novice Creator'
+                }
+            },
             accountSettings: 'Account Settings',
             email: 'Email Address',
             logout: 'Sign Out',
@@ -629,6 +665,42 @@ export const dictionaries = {
         },
         myPage: {
             title: 'マイページ',
+            subtitle: 'クリエイティブアセットとアカウント設定の管理',
+            tabs: {
+                arsenal: 'あなたのアーセナル',
+                favorites: 'お気に入り',
+                settings: '設定'
+            },
+            arsenal: {
+                title: 'あなたのアーセナル',
+                subtitle: '次のプロジェクトに使える獲得済みのアセット。',
+                emptyTitle: 'アーセナルは空です',
+                emptyDesc: '新しいサウンドを見つけて獲得し、コレクションを増やしましょう。',
+                acquired: '獲得済み',
+                downloadMp3: 'MP3',
+                downloadWav: 'WAV',
+                downloadStems: 'ステム',
+            },
+            favorites: {
+                title: '保存したお気に入り',
+                subtitle: 'あなたにインスピレーションを与える厳選されたサウンド。',
+                emptyTitle: 'まだお気に入りはありません',
+                emptyDesc: 'インスピレーションを刺激するサウンドを見つけて、次のクリエイティブプロジェクトのために保存しましょう。',
+                browseButton: 'ライブラリを見る',
+            },
+            badges: {
+                currentTitle: '現在の称号',
+                assetsAcquired: '獲得アセット数',
+                nextRankAt: '次のランクまで',
+                downloads: 'ダウンロード',
+                maxRank: '最高ランク',
+                titles: {
+                    legendary: 'Legendary Composer',
+                    master: 'Sound Master',
+                    rising: 'Rising Creator',
+                    novice: 'Novice Creator'
+                }
+            },
             accountSettings: 'アカウント設定',
             email: 'メールアドレス',
             logout: 'ログアウト',

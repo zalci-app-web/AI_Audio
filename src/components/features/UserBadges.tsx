@@ -8,9 +8,22 @@ interface UserBadgesProps {
         download_count: number
         current_badge: string
     }
+    dict: {
+        currentTitle: string
+        assetsAcquired: string
+        nextRankAt: string
+        downloads: string
+        maxRank: string
+        titles: {
+            legendary: string
+            master: string
+            rising: string
+            novice: string
+        }
+    }
 }
 
-export function UserBadges({ stats }: UserBadgesProps) {
+export function UserBadges({ stats, dict }: UserBadgesProps) {
     // Animation state
     const [isLoaded, setIsLoaded] = useState(false)
 
@@ -22,13 +35,13 @@ export function UserBadges({ stats }: UserBadgesProps) {
     const getBadgeDetails = (badge: string) => {
         switch (badge) {
             case 'Legendary Composer':
-                return { icon: Crown, color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', glow: 'shadow-[0_0_15px_rgba(250,204,21,0.5)]' }
+                return { icon: Crown, color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30', glow: 'shadow-[0_0_15px_rgba(250,204,21,0.5)]', localizedName: dict.titles.legendary }
             case 'Sound Master':
-                return { icon: Star, color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/30', glow: 'shadow-[0_0_15px_rgba(168,85,247,0.5)]' }
+                return { icon: Star, color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/30', glow: 'shadow-[0_0_15px_rgba(168,85,247,0.5)]', localizedName: dict.titles.master }
             case 'Rising Creator':
-                return { icon: Shield, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30', glow: 'shadow-[0_0_15px_rgba(59,130,246,0.5)]' }
+                return { icon: Shield, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30', glow: 'shadow-[0_0_15px_rgba(59,130,246,0.5)]', localizedName: dict.titles.rising }
             default: // Novice
-                return { icon: Trophy, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', glow: 'shadow-[0_0_15px_rgba(16,185,129,0.3)]' }
+                return { icon: Trophy, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', glow: 'shadow-[0_0_15px_rgba(16,185,129,0.3)]', localizedName: dict.titles.novice }
         }
     }
 
@@ -43,22 +56,22 @@ export function UserBadges({ stats }: UserBadgesProps) {
 
                 <div className="flex items-center justify-between relative z-10">
                     <div className="space-y-1">
-                        <h3 className="text-sm font-medium text-gray-400 uppercase tracking-widest">Current Title</h3>
+                        <h3 className="text-sm font-medium text-gray-400 uppercase tracking-widest">{dict.currentTitle}</h3>
                         <div className={`flex items-center gap-3 ${details.color}`}>
                             <Icon className={`w-8 h-8 ${details.glow} rounded-full`} />
                             <span className={`text-2xl sm:text-3xl font-black tracking-tight drop-shadow-md`}>
-                                {stats.current_badge}
+                                {details.localizedName}
                             </span>
                         </div>
-                        <p className="text-xs text-gray-500 mt-2 font-medium">Assets Acquired: <span className="text-gray-300 font-bold">{stats.download_count}</span></p>
+                        <p className="text-xs text-gray-500 mt-2 font-medium">{dict.assetsAcquired}: <span className="text-gray-300 font-bold">{stats.download_count}</span></p>
                     </div>
 
                     <div className="hidden sm:block text-right">
-                        <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">Next Rank At</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">{dict.nextRankAt}</div>
                         <div className="text-sm font-bold text-gray-300">
-                            {stats.download_count < 5 ? '5 Downloads' :
-                                stats.download_count < 20 ? '20 Downloads' :
-                                    stats.download_count < 50 ? '50 Downloads' : 'MAX RANK'}
+                            {stats.download_count < 5 ? `5 ${dict.downloads}` :
+                                stats.download_count < 20 ? `20 ${dict.downloads}` :
+                                    stats.download_count < 50 ? `50 ${dict.downloads}` : dict.maxRank}
                         </div>
                         {/* Progress bar placeholder */}
                         <div className="w-24 h-1.5 bg-gray-800 rounded-full mt-2 overflow-hidden">

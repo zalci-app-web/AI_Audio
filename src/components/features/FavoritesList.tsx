@@ -28,16 +28,15 @@ export function FavoritesList({ songs, dict, user, purchasedIds }: FavoritesList
                 <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6 ring-1 ring-white/10 group-hover:ring-rose-500/30 transition-all">
                     <Music className="w-10 h-10 text-gray-500 group-hover:text-rose-400 transition-colors" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-200 mb-2">No Favorites Yet</h3>
+                <h3 className="text-xl font-bold text-gray-200 mb-2">{dict.myPage.favorites.emptyTitle}</h3>
                 <p className="text-gray-400 text-sm max-w-sm mb-6">
-                    Discover sounds that inspire you and save them to your collection for
-                    your next creative project.
+                    {dict.myPage.favorites.emptyDesc}
                 </p>
                 <Link
                     href="/library"
                     className="px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium text-sm transition-all border border-white/10"
                 >
-                    Browse Library
+                    {dict.myPage.favorites.browseButton}
                 </Link>
             </div>
         )

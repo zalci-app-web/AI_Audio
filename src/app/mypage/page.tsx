@@ -61,12 +61,12 @@ export default async function MyPage() {
                     <div className="space-y-3">
                         <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 sm:text-5xl drop-shadow-sm flex items-center gap-3">
                             <Shield className="w-10 h-10 text-blue-400" />
-                            {dict.myPage.title || "Command Center"}
+                            {dict.myPage.title}
                         </h1>
-                        <p className="text-gray-400 text-lg">Manage your creative arsenal and account settings.</p>
+                        <p className="text-gray-400 text-lg">{dict.myPage.subtitle}</p>
                     </div>
 
-                    <UserBadges stats={stats} />
+                    <UserBadges stats={stats} dict={dict.myPage.badges} />
 
                     <Tabs defaultValue="arsenal" className="w-full">
                         <TabsList className="bg-zinc-900/50 border border-white/5 p-1 rounded-xl mb-8 flex w-full max-w-fit">
@@ -76,7 +76,7 @@ export default async function MyPage() {
                             >
                                 <div className="flex items-center gap-2">
                                     <Library className="w-4 h-4" />
-                                    Your Arsenal
+                                    {dict.myPage.tabs.arsenal}
                                 </div>
                             </TabsTrigger>
                             <TabsTrigger
@@ -85,7 +85,7 @@ export default async function MyPage() {
                             >
                                 <div className="flex items-center gap-2">
                                     <Heart className="w-4 h-4" />
-                                    Favorites
+                                    {dict.myPage.tabs.favorites}
                                 </div>
                             </TabsTrigger>
                             <TabsTrigger
@@ -94,7 +94,7 @@ export default async function MyPage() {
                             >
                                 <div className="flex items-center gap-2">
                                     <Settings className="w-4 h-4" />
-                                    Settings
+                                    {dict.myPage.tabs.settings}
                                 </div>
                             </TabsTrigger>
                         </TabsList>
@@ -107,24 +107,24 @@ export default async function MyPage() {
                                 <div className="mb-6">
                                     <h2 className="text-2xl font-bold text-gray-100 flex items-center gap-2">
                                         <Library className="w-6 h-6 text-indigo-400" />
-                                        Your Arsenal
+                                        {dict.myPage.arsenal.title}
                                     </h2>
-                                    <p className="text-sm text-gray-400 mt-1">Acquired assets ready for your next project.</p>
+                                    <p className="text-sm text-gray-400 mt-1">{dict.myPage.arsenal.subtitle}</p>
                                 </div>
-                                <ArsenalList songs={arsenalSongs.filter(s => s !== null)} dict={dict} />
+                                <ArsenalList songs={arsenalSongs.filter(s => s !== null)} dict={dict.myPage.arsenal} />
                             </TabsContent>
 
                             <TabsContent value="favorites" className="mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500">
                                 <div className="mb-6">
                                     <h2 className="text-2xl font-bold text-gray-100 flex items-center gap-2">
                                         <Heart className="w-6 h-6 text-rose-400" />
-                                        Saved Favorites
+                                        {dict.myPage.favorites.title}
                                     </h2>
-                                    <p className="text-sm text-gray-400 mt-1">Your curated collection of inspiring sounds.</p>
+                                    <p className="text-sm text-gray-400 mt-1">{dict.myPage.favorites.subtitle}</p>
                                 </div>
                                 <FavoritesList
                                     songs={favoriteSongs.filter(s => s !== null)}
-                                    dict={{ ...dict, card: { ...dict.card, free: 'Free' }, purchaseModal: {} }}
+                                    dict={{ ...dict, myPage: dict.myPage, card: { ...dict.card, free: 'Free' }, purchaseModal: {} }}
                                     user={user}
                                     purchasedIds={purchasedIds}
                                 />

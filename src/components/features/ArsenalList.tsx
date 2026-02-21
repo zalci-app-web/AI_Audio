@@ -19,7 +19,16 @@ interface Song {
 
 interface ArsenalListProps {
     songs: Song[]
-    dict: any
+    dict: {
+        title: string
+        subtitle: string
+        emptyTitle: string
+        emptyDesc: string
+        acquired: string
+        downloadMp3: string
+        downloadWav: string
+        downloadStems: string
+    }
 }
 
 export function ArsenalList({ songs, dict }: ArsenalListProps) {
@@ -56,9 +65,9 @@ export function ArsenalList({ songs, dict }: ArsenalListProps) {
                 <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
                     <Disc3 className="w-8 h-8 text-gray-500" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-300">Your Arsenal is Empty</h3>
+                <h3 className="text-lg font-medium text-gray-300">{dict.emptyTitle}</h3>
                 <p className="text-gray-500 text-sm mt-2 max-w-sm">
-                    Discover and acquire new sounds to build your collection.
+                    {dict.emptyDesc}
                 </p>
             </div>
         )
@@ -89,7 +98,7 @@ export function ArsenalList({ songs, dict }: ArsenalListProps) {
 
                     <div className="flex-1 min-w-0 text-center sm:text-left w-full">
                         <h4 className="font-bold text-gray-200 truncate pr-4">{song.title}</h4>
-                        <p className="text-xs text-green-400 font-medium mt-1">Acquired</p>
+                        <p className="text-xs text-green-400 font-medium mt-1">{dict.acquired}</p>
                     </div>
 
                     <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
@@ -98,7 +107,7 @@ export function ArsenalList({ songs, dict }: ArsenalListProps) {
                             onClick={() => downloadFile(song.mp3_url || song.preview_url, `${song.title}.mp3`)}
                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-gray-300 transition-colors"
                         >
-                            <Download className="w-3.5 h-3.5" /> MP3
+                            <Download className="w-3.5 h-3.5" /> {dict.downloadMp3}
                         </button>
 
                         {/* STEMS & Premium Formats */}
@@ -107,7 +116,7 @@ export function ArsenalList({ songs, dict }: ArsenalListProps) {
                                 onClick={() => alert("WAV download would initiate here")}
                                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 text-xs font-medium transition-colors"
                             >
-                                <Download className="w-3.5 h-3.5" /> WAV
+                                <Download className="w-3.5 h-3.5" /> {dict.downloadWav}
                             </button>
                         )}
 
@@ -116,7 +125,7 @@ export function ArsenalList({ songs, dict }: ArsenalListProps) {
                                 onClick={() => alert("STEM/Package download would initiate here")}
                                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 text-xs font-medium transition-colors"
                             >
-                                <FolderDown className="w-3.5 h-3.5" /> STEMS
+                                <FolderDown className="w-3.5 h-3.5" /> {dict.downloadStems}
                             </button>
                         )}
                     </div>
