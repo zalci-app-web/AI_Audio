@@ -75,11 +75,11 @@ export default async function Home() {
             <div className="flex items-center gap-2 transition-transform duration-300 group-hover:scale-105">
               <Gamepad2 className="h-5 w-5 animate-bounce text-yellow-200" />
               <span className="font-bold tracking-wide text-sm sm:text-base drop-shadow-md">
-                【β版オープン記念】あなたのゲームを進化させる全楽曲・無料解放中！
+                {dict.campaign.announcement}
               </span>
             </div>
             <span className="text-xs sm:text-sm font-bold text-orange-950 bg-yellow-400 px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(250,204,21,0.5)] transition-transform duration-300 hover:scale-110 hover:bg-yellow-300">
-              ※登録・ログイン不要でフルアクセス
+              {dict.campaign.noRegistration}
             </span>
           </div>
         </div>

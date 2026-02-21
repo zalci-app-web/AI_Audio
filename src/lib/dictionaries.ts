@@ -116,6 +116,10 @@ export const dictionaries = {
                 midi: 'MIDI Data',
             }
         },
+        campaign: {
+            announcement: '【Beta Launch Celebration】All tracks currently FREE to power up your game!',
+            noRegistration: '* Full access without registration or login',
+        },
         login: {
             signInTitle: 'Sign In',
             signUpTitle: 'Create Account',
@@ -516,6 +520,10 @@ export const dictionaries = {
                 highRes: 'ハイレゾ音源 (96kHz/24bit)',
                 midi: 'MIDIデータ',
             }
+        },
+        campaign: {
+            announcement: '【β版オープン記念】あなたのゲームを進化させる全楽曲・無料解放中！',
+            noRegistration: '※登録・ログイン不要でフルアクセス',
         },
         login: {
             signInTitle: 'サインイン',
