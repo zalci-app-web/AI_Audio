@@ -27,6 +27,9 @@ interface PurchaseModalDict {
     payWithStripe: string
     processing: string
     securedBy: string
+    includes: string
+    mp3Full: string
+    included: string
     options: {
         wav: string
         loop: string
@@ -170,11 +173,11 @@ export function PurchaseModal({ isOpen, onClose, song, dict }: PurchaseModalProp
 
                 {/* Product Info Section */}
                 <div className="mb-6 space-y-3">
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">内容</h3>
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">{dict.includes}</h3>
                     <div className="rounded-lg border border-white/10 bg-white/5 p-4">
                         <div className="flex items-center justify-between">
-                            <span className="text-gray-200">MP3 音源（フル版）</span>
-                            <span className="text-blue-400 font-semibold">✓ 含まれます</span>
+                            <span className="text-gray-200">{dict.mp3Full}</span>
+                            <span className="text-blue-400 font-semibold">{dict.included}</span>
                         </div>
                     </div>
                 </div>

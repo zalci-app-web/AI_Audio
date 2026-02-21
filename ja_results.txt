@@ -1,0 +1,96 @@
+app\(auth)\login\page.tsx:197:<Link href="/terms" target="_blank" className="text-blue-400 hover:underline">利用規約</Link>
+app\(auth)\login\page.tsx:198:と
+app\(auth)\login\page.tsx:199:<Link href="/policy" target="_blank" className="text-blue-400 hover:underline">プライバシーポリシー</Link>
+app\(auth)\login\page.tsx:200:に同意します
+app\about\page.tsx:7:title: 'Zalci Audioについて | AI生成BGMストア',
+app\about\page.tsx:8:description: 'Zalci Audioは、生成AIの力をすべてのクリエイターに届けるAIオーディオストアです。RPGや動画、ゲーム制作に最適なBGMを提供します。ハイスペックPCや複雑なプロンプトは不要。',
+app\admin\page.tsx:36:楽曲管理
+app\admin\page.tsx:39:楽曲の追加・編集・削除を行います
+app\admin\page.tsx:50:<h2 className="text-2xl font-bold text-white">登録済み楽曲</h2>
+app\admin\page.tsx:54:<p>楽曲の読み込みに失敗しました</p>
+app\admin\page.tsx:58:<p className="text-gray-400">楽曲がまだ登録されていません</p>
+app\api\admin\songs\route.ts:46:name: `${title} (200円)`,
+app\api\admin\songs\route.ts:47:description: description || 'ライブラリに追加されます。audiostore.zalci.net',
+app\api\admin\songs\route.ts:69:description: description || 'ライブラリに追加されます。audiostore.zalci.net',
+app\api\checkout\route.ts:18:return NextResponse.json({ error: '認証が必要です。ログインしてください。' }, { status: 401 })
+app\api\checkout\route.ts:24:return NextResponse.json({ error: '楽曲IDが指定されていません。' }, { status: 400 })
+app\api\checkout\route.ts:36:return NextResponse.json({ error: '楽曲情報が見つかりませんでした。' }, { status: 404 })
+app\api\checkout\route.ts:81:{ error: '決済処理中にエラーが発生しました。', details: errorMessage },
+app\api\contact\route.ts:10:general: '一般的なご質問',
+app\api\contact\route.ts:11:bug: '不具合の報告',
+app\api\contact\route.ts:12:purchase: '購入・決済について',
+app\api\contact\route.ts:13:request: '機能リクエスト',
+app\api\contact\route.ts:14:other: 'その他',
+app\api\contact\route.ts:29:subject: `【Zalci Audio】お問い合わせ: ${subjectLabel}`,
+app\api\contact\route.ts:32:Zalci Audio ウェブサイトから新しいお問い合わせがありました。
+app\api\contact\route.ts:34:【お問い合わせ内容】
+app\api\contact\route.ts:37:【送信元メールアドレス】
+app\api\contact\route.ts:40:【詳細内容】
+app\contact\page.tsx:8:title: 'お問い合わせ',
+app\contact\page.tsx:9:description: 'Zalci Audioへのご質問、ご意見、不具合報告はこちらからお問い合わせください。通常2〜3営業日以内にご返答いたします。',
+app\layout.tsx:21:default: "【全曲無料】Zalci Audio - AI生成BGM素材 | ゲーム・動画向け著作権フリー楽曲",
+app\layout.tsx:24:description: "【2月中限定オープンセール！全曲無料配布実施中】Zalci AudioによるAI生成BGMライブラリ。RPG、バトル、ホラー、動画制作に最適な高品質な楽曲をダウンロードできます。",
+app\layout.tsx:25:keywords: ["AI音楽", "BGM素材", "全曲無料", "ゲーム開発", "Zalci Audio", "著作権フリー", "フリーBGM", "RPG BGM", "AI生成音楽", "ゲームBGM", "動画BGM", "ロイヤリティフリー", "音楽素材"],
+app\layout.tsx:33:title: "【全曲無料】Zalci Audio - AI生成BGM素材 | ゲーム・動画向け著作権フリー",
+app\layout.tsx:34:description: "【2月中限定オープンセール！全曲無料配布実施中】Zalci AudioによるAI生成BGMライブラリ。RPG、バトル、ホラー、動画制作に最適な高品質な楽曲をダウンロードできます。",
+app\layout.tsx:42:alt: "Zalci Audio - AI生成BGM素材ストア",
+app\layout.tsx:50:title: "【全曲無料】Zalci Audio - AI生成BGM素材",
+app\layout.tsx:51:description: "AI生成BGMライブラリ。ゲーム、動画、配信向けの高品質なオーディオ素材を無料でダウンロード。",
+app\legal\page.tsx:9:title: '特定商取引法に基づく表記',
+app\legal\page.tsx:10:description: 'Zalci Audioの特定商取引法に基づく表記ページです。販売者、住所、連絡先、お支払い方法、返品について記載しています。',
+app\loading.tsx:5:{/* エンタメ感のあるオーディオウェーブ風アニメーション（スピナー） */}
+app\page.tsx:36:{/* エラー時もゲーミングテイストなグリッチ風エフェクト */}
+app\page.tsx:41:<h2 className="text-xl font-bold tracking-tight text-red-400 drop-shadow-[0_0_10px_rgba(239,68,68,0.3)]">システムエラー発生</h2>
+app\page.tsx:42:<p className="text-sm text-gray-400">ステータス異常を検知しました。再読み込みをお試しください。</p>
+app\page.tsx:68:{/* キャンペーンバナー：理由を明記し、怪しさを軽減しつつエンタメ感を注入 */}
+app\page.tsx:71:{/* 動く光の筋（スウィープエフェクト） */}
+app\page.tsx:78:【β版オープン記念】あなたのゲームを進化させる全楽曲・無料解放中！
+app\page.tsx:82:※登録・ログイン不要でフルアクセス
+app\page.tsx:87:{/* ヒーローセクション周辺：安全性の強調 */}
+app\page.tsx:89:{/* ゲーミングテイストな背景の光芒 */}
+app\page.tsx:97:{/* 信頼感を醸成するトラストバッジ（ホバー連動アクション） */}
+app\page.tsx:102:<span className="font-medium">1クリックで即・視聴開始</span>
+app\page.tsx:106:<span className="font-medium">クレカ登録完全不要</span>
+app\page.tsx:110:<span className="font-medium">クリーンな直ダウンロード</span>
+app\page.tsx:116:{/* コンテンツセクション：エンタメ感とワクワクさせるコピー */}
+app\page.tsx:118:{/* 背景のグローエフェクト */}
+app\page.tsx:127:プロジェクトを覚醒させる<br className="hidden md:block" />次世代サウンド
+app\page.tsx:131:クリエイターの妥協なき要求に応える、即戦力のオーディオアセット。
+app\page.tsx:132:あなたのゲーム、動画、配信に、胸躍る「鼓動」をインストールしよう。
+app\page.tsx:148:{/* カードのホバー時に背後にゲーミングテイストなネオンエフェクトを追加 */}
+app\policy\page.tsx:9:title: 'プライバシーポリシー',
+app\policy\page.tsx:10:description: 'Zalci Audioのプライバシーポリシーです。個人情報の収集・利用・管理方法についての方針を定めています。',
+app\pricing\layout.tsx:4:title: '料金プラン',
+app\pricing\layout.tsx:5:description: 'Zalci Audioの料金プランページです。高品質なAI生成BGMを取得するためのプランをご覧ください。',
+app\sounds\page.tsx:10:title: '全サウンド一覧 | AI生成BGM素材',
+app\sounds\page.tsx:11:description: 'Zalci Audioの全AI生成BGMコレクション。ゲーム、動画、配信向けの高品質なオーディオ素材を無料でダウンロードできます。RPG、バトル、ホラー、アンビエントなど多彩なジャンル。',
+app\sounds\page.tsx:105:<>検索結果: &quot;{searchQuery}&quot;</>
+app\terms\page.tsx:9:title: '利用規約',
+app\terms\page.tsx:10:description: 'Zalci Audioの利用規約です。サービスのご利用にあたっての各種規定、禁止事項、返品ポリシー等を定めています。',
+components\admin\AddSongForm.tsx:43:alert('MP3ファイルが見つかりませんでした。')
+components\admin\AddSongForm.tsx:85:setUploadProgress('アップロードを開始します...')
+components\admin\AddSongForm.tsx:101:setUploadProgress(`(${i + 1}/${selectedFiles.length}) ${title} を処理中...`)
+components\admin\AddSongForm.tsx:145:setUploadProgress(`完了: ${successCount} / ${selectedFiles.length} 曲`)
+components\admin\AddSongForm.tsx:167:MP3を追加 (一括)
+components\admin\AddSongForm.tsx:174:<h2 className="mb-6 text-2xl font-bold text-white">楽曲を追加 (MP3)</h2>
+components\admin\AddSongForm.tsx:180:説明 / タグ (全ファイル共通)
+components\admin\AddSongForm.tsx:185:placeholder="楽曲の説明やタグを入力 (例: RPG Battle BossTheme)"
+components\admin\AddSongForm.tsx:214:クリックしてMP3ファイルを選択
+components\admin\AddSongForm.tsx:217:複数選択可能 • ファイル名がタイトルになります
+components\admin\AddSongForm.tsx:262:アップロード中...
+components\admin\AddSongForm.tsx:265:`すべてのファイルを登録 (${selectedFiles.length})`
+components\admin\AddSongForm.tsx:274:キャンセル
+components\admin\DeleteSongButton.tsx:10:if (!confirm(`「${songTitle}」を削除してもよろしいですか？`)) {
+components\admin\DeleteSongButton.tsx:28:alert('削除に失敗しました')
+components\admin\DeleteSongButton.tsx:38:title="削除"
+components\layout\footer.tsx:18:利用規約
+components\layout\footer.tsx:21:プライバシーポリシー
+components\layout\footer.tsx:24:特定商取引法に基づく表記
+components\layout\footer.tsx:27:お問い合わせ
+components\PurchaseModal.tsx:106:const errorMessage = error instanceof Error ? error.message : '決済処理中にエラーが発生しました。'
+components\PurchaseModal.tsx:173:<h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">内容</h3>
+components\PurchaseModal.tsx:176:<span className="text-gray-200">MP3 音源（フル版）</span>
+components\PurchaseModal.tsx:177:<span className="text-blue-400 font-semibold">✓ 含まれます</span>
+components\SearchBar.tsx:11:export function SearchBar({ placeholder = '楽曲を検索...' }: SearchBarProps) {
+components\seo\JsonLd.tsx:15:"description": "AI生成BGMを提供するオーディオ素材ストア。ゲーム、動画、配信向けの高品質なフリーBGMをダウンロードできます。",
+components\seo\JsonLd.tsx:33:"description": "AI技術を活用した高品質なBGM・オーディオ素材を提供するストア。",

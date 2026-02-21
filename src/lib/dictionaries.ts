@@ -106,6 +106,9 @@ export const dictionaries = {
             payWithStripe: 'Pay with Stripe',
             processing: 'Processing...',
             securedBy: 'Secure checkout powered by Stripe',
+            includes: 'Includes',
+            mp3Full: 'MP3 Audio (Full Version)',
+            included: '✓ Included',
             options: {
                 wav: 'WAV Format (High Quality)',
                 loop: 'Loop Version Included',
@@ -504,6 +507,9 @@ export const dictionaries = {
             purchaseWithFree: '無料ダウンロード',
             processing: '処理中...',
             securedBy: 'Stripeによる安全な決済',
+            includes: '内容',
+            mp3Full: 'MP3 音源（フル版）',
+            included: '✓ 含まれます',
             options: {
                 wav: 'WAV形式 (高音質)',
                 loop: 'ループバージョンを含む',
@@ -713,10 +719,10 @@ export const dictionaries = {
                 weeklyCredits: '今週の無料枠',
                 creditsRemaining: '残り:',
                 titles: {
-                    legendary: 'Legendary Composer',
-                    master: 'Sound Master',
-                    rising: 'Rising Creator',
-                    novice: 'Novice Creator'
+                    legendary: '伝説のコンポーザー',
+                    master: 'サウンドマスター',
+                    rising: '注目のクリエイター',
+                    novice: '新人クリエイター'
                 }
             },
             accountSettings: 'アカウント設定',
