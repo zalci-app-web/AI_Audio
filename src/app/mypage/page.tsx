@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/footer'
 import { dictionaries } from '@/lib/dictionaries'
 import { AccountSettings } from '@/components/features/AccountSettings'
 import { UserBadges } from '@/components/features/UserBadges'
-import { ArsenalList } from '@/components/features/ArsenalList'
+import { LibraryList } from '@/components/features/LibraryList'
 import { FavoritesList } from '@/components/features/FavoritesList'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Shield, Heart, Settings, Library } from 'lucide-react'
@@ -30,7 +30,39 @@ export default async function MyPage() {
         supabase.from('favorites').select('song_id, songs(*)').eq('user_id', user.id)
     ])
 
-    const stats = statsResponse.data || { download_count: 0, current_badge: 'Novice Creator' }
+    let stats = statsResponse.data || { download_count: 0, current_badge: 'Novice Creator' }
+
+    // Weekly Credit Reset Logic
+    const badgeCreditMap: Record<string, number> = {
+        'Legendary Composer': 10,
+        'Sound Master': 5,
+        'Rising Creator': 3,
+        'Novice Creator': 1
+    };
+
+    const maxCredits = badgeCreditMap[stats.current_badge] || 1;
+    const lastResetAt = stats.last_credits_reset_at ? new Date(stats.last_credits_reset_at) : new Date(0);
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+    if (lastResetAt < oneWeekAgo) {
+        // Reset credits
+        const { data: updatedStats, error: updateError } = await supabase
+            .from('user_stats')
+            .update({
+                weekly_free_credits_left: maxCredits,
+                last_credits_reset_at: new Date().toISOString()
+            })
+            .eq('user_id', user.id)
+            .select()
+            .single();
+
+        if (!updateError && updatedStats) {
+            stats = updatedStats;
+        }
+    }
+
+    // Add maxCredits for UI calculation
+    stats = { ...stats, max_credits: maxCredits };
 
     // Process joined data, handling array vs object returns from Supabase
     const extractSongs = (data: any[]) => {
@@ -42,11 +74,11 @@ export default async function MyPage() {
         }).filter(Boolean);
     };
 
-    const arsenalSongs = extractSongs(purchasesResponse.data || []);
+    const librarySongs = extractSongs(purchasesResponse.data || []);
     const favoriteSongs = extractSongs(favoritesResponse.data || []);
 
     // Helper to get purchased IDs for the Favorites list (to show proper button state)
-    const purchasedIds = new Set(arsenalSongs.map(s => s.id));
+    const purchasedIds = new Set(librarySongs.map(s => s.id));
 
     return (
         <div className="flex min-h-screen flex-col bg-[#000000] text-gray-100 font-sans selection:bg-purple-500/30">
@@ -111,7 +143,7 @@ export default async function MyPage() {
                                     </h2>
                                     <p className="text-sm text-gray-400 mt-1">{dict.myPage.arsenal.subtitle}</p>
                                 </div>
-                                <ArsenalList songs={arsenalSongs.filter(s => s !== null)} dict={dict.myPage.arsenal} />
+                                <LibraryList songs={librarySongs.filter((s: any) => s !== null)} dict={dict.myPage.arsenal} />
                             </TabsContent>
 
                             <TabsContent value="favorites" className="mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -132,7 +164,11 @@ export default async function MyPage() {
 
                             <TabsContent value="settings" className="mt-0 outline-none animate-in fade-in slide-in-from-bottom-2 duration-500">
                                 <div className="max-w-xl">
-                                    <AccountSettings dict={dict.myPage} email={user.email || ''} />
+                                    <AccountSettings
+                                        dict={dict.myPage}
+                                        email={user.email || ''}
+                                        provider={user.app_metadata?.provider || 'email'}
+                                    />
                                 </div>
                             </TabsContent>
                         </div>

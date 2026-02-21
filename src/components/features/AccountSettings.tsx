@@ -16,15 +16,32 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+import { Mail, Github, Chrome, Twitter } from 'lucide-react'
+
 interface AccountSettingsProps {
-    dict: any // Type this properly if possible, e.g. typeof dictionaries.ja.myPage
+    dict: any
     email: string
+    provider: string
 }
 
-export function AccountSettings({ dict, email }: AccountSettingsProps) {
+export function AccountSettings({ dict, email, provider }: AccountSettingsProps) {
     const router = useRouter()
     const supabase = createClient()
     const [isDeleting, setIsDeleting] = useState(false)
+
+    const getProviderDisplay = (provider: string) => {
+        switch (provider) {
+            case 'google':
+                return { name: dict.providerGoogle, icon: Chrome, color: 'text-blue-400' }
+            case 'twitter':
+                return { name: dict.providerTwitter, icon: Twitter, color: 'text-sky-400' }
+            default:
+                return { name: dict.providerEmail, icon: Mail, color: 'text-gray-400' }
+        }
+    }
+
+    const providerInfo = getProviderDisplay(provider)
+    const ProviderIcon = providerInfo.icon
 
     const handleSignOut = async () => {
         await supabase.auth.signOut()
@@ -80,48 +97,64 @@ export function AccountSettings({ dict, email }: AccountSettingsProps) {
 
     return (
         <div className="space-y-8">
-            <div className="space-y-4">
-                <h2 className="text-lg font-medium">{dict.accountSettings}</h2>
-                <div className="grid gap-2">
-                    <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        {dict.email}
-                    </label>
-                    <div className="p-3 rounded-md bg-muted text-sm">
-                        {email}
+            <div className="space-y-6">
+                <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">{dict.accountSettings}</h2>
+
+                <div className="grid gap-6">
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-500 uppercase tracking-widest">
+                            {dict.email}
+                        </label>
+                        <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-gray-200 flex items-center justify-between group h-14">
+                            <span className="font-medium">{email}</span>
+                            <Mail className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors" />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-500 uppercase tracking-widest">
+                            {dict.signInMethod}
+                        </label>
+                        <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-gray-200 flex items-center justify-between group h-14">
+                            <span className="font-medium">{providerInfo.name}</span>
+                            <ProviderIcon className={`w-5 h-5 ${providerInfo.color} drop-shadow-[0_0_8px_currentColor]`} />
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="space-y-4 pt-4 border-t">
-                <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-                    <Button variant="outline" onClick={handleChangePassword} disabled={isSendingReset}>
-                        <span>{isSendingReset ? '...' : dict.changePassword}</span>
-                    </Button>
-                    <Button variant="outline" onClick={handleSignOut}>
+            <div className="space-y-4 pt-8 border-t border-white/5">
+                <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+                    {provider === 'email' && (
+                        <Button variant="outline" onClick={handleChangePassword} disabled={isSendingReset} className="rounded-xl border-white/10 hover:bg-white/5 h-11 px-6 font-bold">
+                            <span>{isSendingReset ? '...' : dict.changePassword}</span>
+                        </Button>
+                    )}
+                    <Button variant="outline" onClick={handleSignOut} className="rounded-xl border-white/10 hover:bg-white/5 h-11 px-6 font-bold">
                         {dict.logout}
                     </Button>
 
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive" disabled={isDeleting}>
+                            <Button variant="destructive" disabled={isDeleting} className="rounded-xl h-11 px-6 font-bold">
                                 <span>{isDeleting ? '...' : dict.deleteAccount}</span>
                             </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="bg-zinc-950 border-white/10 rounded-3xl">
                             <AlertDialogHeader>
-                                <AlertDialogTitle>{dict.deleteConfirmTitle}</AlertDialogTitle>
-                                <AlertDialogDescription>
+                                <AlertDialogTitle className="text-xl font-bold">{dict.deleteConfirmTitle}</AlertDialogTitle>
+                                <AlertDialogDescription className="text-gray-400">
                                     {dict.deleteConfirmDescription}
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel>{dict.cancel}</AlertDialogCancel>
+                                <AlertDialogCancel className="bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 rounded-xl">{dict.cancel}</AlertDialogCancel>
                                 <AlertDialogAction
                                     onClick={(e) => {
                                         e.preventDefault()
                                         handleDeleteAccount()
                                     }}
-                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    className="bg-red-600/20 text-red-500 border border-red-500/20 hover:bg-red-600/30 rounded-xl font-bold"
                                 >
                                     {dict.deleteConfirmButton}
                                 </AlertDialogAction>

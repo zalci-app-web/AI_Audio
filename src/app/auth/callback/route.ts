@@ -22,9 +22,13 @@ export async function GET(request: Request) {
             } else {
                 return NextResponse.redirect(`${origin}${next}`)
             }
+        } else {
+            console.error('exchangeCodeForSession error in auth/callback:', error)
         }
+    } else {
+        console.error('No code parameter found in the auth/callback request URL')
     }
 
     // return the user to an error page with instructions
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+    return NextResponse.redirect(`${origin}/?login_error=true`)
 }

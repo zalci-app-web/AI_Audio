@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
+
+export const metadata: Metadata = {
+    title: 'Zalci Audioについて | AI生成BGMストア',
+    description: 'Zalci Audioは、生成AIの力をすべてのクリエイターに届けるAIオーディオストアです。RPGや動画、ゲーム制作に最適なBGMを提供します。ハイスペックPCや複雑なプロンプトは不要。',
+    alternates: { canonical: '/about' },
+}
 
 export default async function AboutPage() {
     const dict = await getDictionary()

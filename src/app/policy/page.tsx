@@ -1,8 +1,15 @@
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+    title: 'プライバシーポリシー',
+    description: 'Zalci Audioのプライバシーポリシーです。個人情報の収集・利用・管理方法についての方針を定めています。',
+    alternates: { canonical: '/policy' },
+}
 
 export default async function PrivacyPolicyPage() {
     const dict = await getDictionary()

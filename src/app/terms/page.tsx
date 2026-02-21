@@ -1,8 +1,15 @@
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+    title: '利用規約',
+    description: 'Zalci Audioの利用規約です。サービスのご利用にあたっての各種規定、禁止事項、返品ポリシー等を定めています。',
+    alternates: { canonical: '/terms' },
+}
 
 export default async function TermsPage() {
     const dict = await getDictionary()

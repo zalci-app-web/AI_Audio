@@ -33,8 +33,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Song not found' }, { status: 404 })
         }
 
-        // 2. Insert into purchases table (Use Admin Client to bypass RLS if needed, though RLS might allow insert for authenticated users if configured. 
-        // Safe to use Admin client to ensure it works regardless of RLS on 'purchases' insert for normal users)
+        // 2. Insert into purchases table
         const supabaseAdmin = createAdminClient()
 
         // Check if already purchased
@@ -49,14 +48,41 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: 'Already purchased' }, { status: 200 })
         }
 
+        // Credit Logic: If song is NOT free, check for weekly credits
+        if (song.price > 0) {
+            const { data: stats, error: statsError } = await supabaseAdmin
+                .from('user_stats')
+                .select('weekly_free_credits_left')
+                .eq('user_id', user.id)
+                .single()
+
+            if (statsError || !stats || (stats.weekly_free_credits_left || 0) <= 0) {
+                return NextResponse.json(
+                    { error: 'No weekly credits left' },
+                    { status: 403 }
+                )
+            }
+
+            // Decrement credit
+            const { error: decError } = await supabaseAdmin
+                .from('user_stats')
+                .update({ weekly_free_credits_left: stats.weekly_free_credits_left - 1 })
+                .eq('user_id', user.id)
+
+            if (decError) {
+                console.error('Failed to decrement credits:', decError)
+                return NextResponse.json({ error: 'Failed to use credit' }, { status: 500 })
+            }
+        }
+
         const { error: insertError } = await supabaseAdmin
             .from('purchases')
             .insert({
                 user_id: user.id,
                 song_id: songId,
-                amount: 0, // Free
+                amount: 0, // Claimed via credit or campaign
                 currency: 'jpy',
-                stripe_payment_id: 'free_campaign_' + new Date().getTime(),
+                stripe_payment_id: song.price > 0 ? 'credit_use_' + new Date().getTime() : 'free_campaign_' + new Date().getTime(),
                 status: 'completed'
             })
 

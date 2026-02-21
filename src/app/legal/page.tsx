@@ -1,20 +1,14 @@
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
 
-import type { Metadata } from 'next'
-
-export async function generateMetadata(): Promise<Metadata> {
-    return {
-        title: '特定商取引法に基づく表記 | Zalci Audio',
-        description: 'Zalci Audioの特定商取引法に基づく表記ページです。',
-        robots: {
-            index: true,
-            follow: true,
-        },
-    }
+export const metadata: Metadata = {
+    title: '特定商取引法に基づく表記',
+    description: 'Zalci Audioの特定商取引法に基づく表記ページです。販売者、住所、連絡先、お支払い方法、返品について記載しています。',
+    alternates: { canonical: '/legal' },
 }
 
 export default async function LegalPage() {

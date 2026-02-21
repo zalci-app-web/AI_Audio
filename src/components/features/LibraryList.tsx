@@ -17,7 +17,7 @@ interface Song {
     mp3_url?: string
 }
 
-interface ArsenalListProps {
+interface LibraryListProps {
     songs: Song[]
     dict: {
         title: string
@@ -31,7 +31,7 @@ interface ArsenalListProps {
     }
 }
 
-export function ArsenalList({ songs, dict }: ArsenalListProps) {
+export function LibraryList({ songs, dict }: LibraryListProps) {
     const [playingId, setPlayingId] = useState<string | null>(null)
     const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null)
 

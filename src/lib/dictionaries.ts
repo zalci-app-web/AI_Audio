@@ -278,16 +278,16 @@ export const dictionaries = {
         },
         myPage: {
             title: 'My Page',
-            subtitle: 'Manage your creative arsenal and account settings.',
+            subtitle: 'Manage your creative library and account settings.',
             tabs: {
-                arsenal: 'Your Arsenal',
+                arsenal: 'My Library',
                 favorites: 'Favorites',
                 settings: 'Settings'
             },
             arsenal: {
-                title: 'Your Arsenal',
+                title: 'My Library',
                 subtitle: 'Acquired assets ready for your next project.',
-                emptyTitle: 'Your Arsenal is Empty',
+                emptyTitle: 'Your Library is Empty',
                 emptyDesc: 'Discover and acquire new sounds to build your collection.',
                 acquired: 'Acquired',
                 downloadMp3: 'MP3',
@@ -307,6 +307,8 @@ export const dictionaries = {
                 nextRankAt: 'Next Rank At',
                 downloads: 'Downloads',
                 maxRank: 'MAX RANK',
+                weeklyCredits: 'Weekly Free Credits',
+                creditsRemaining: 'Remaining:',
                 titles: {
                     legendary: 'Legendary Composer',
                     master: 'Sound Master',
@@ -315,6 +317,10 @@ export const dictionaries = {
                 }
             },
             accountSettings: 'Account Settings',
+            signInMethod: 'Sign-in Method',
+            providerGoogle: 'Google Account',
+            providerTwitter: 'X (Twitter) Account',
+            providerEmail: 'Email & Password',
             email: 'Email Address',
             logout: 'Sign Out',
             deleteAccount: 'Delete Account',
@@ -667,14 +673,14 @@ export const dictionaries = {
             title: 'マイページ',
             subtitle: 'クリエイティブアセットとアカウント設定の管理',
             tabs: {
-                arsenal: 'あなたのアーセナル',
+                arsenal: 'ライブラリ',
                 favorites: 'お気に入り',
                 settings: '設定'
             },
             arsenal: {
-                title: 'あなたのアーセナル',
+                title: 'マイライブラリ',
                 subtitle: '次のプロジェクトに使える獲得済みのアセット。',
-                emptyTitle: 'アーセナルは空です',
+                emptyTitle: 'ライブラリは空です',
                 emptyDesc: '新しいサウンドを見つけて獲得し、コレクションを増やしましょう。',
                 acquired: '獲得済み',
                 downloadMp3: 'MP3',
@@ -694,6 +700,8 @@ export const dictionaries = {
                 nextRankAt: '次のランクまで',
                 downloads: 'ダウンロード',
                 maxRank: '最高ランク',
+                weeklyCredits: '今週の無料枠',
+                creditsRemaining: '残り:',
                 titles: {
                     legendary: 'Legendary Composer',
                     master: 'Sound Master',
@@ -702,6 +710,10 @@ export const dictionaries = {
                 }
             },
             accountSettings: 'アカウント設定',
+            signInMethod: 'サインイン方式',
+            providerGoogle: 'Google アカウント',
+            providerTwitter: 'X (Twitter) アカウント',
+            providerEmail: 'メールアドレス & パスワード',
             email: 'メールアドレス',
             logout: 'ログアウト',
             deleteAccount: 'アカウント削除',

@@ -1,9 +1,16 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { SongCard } from '@/components/SongCard'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
 import { SortSelect } from '@/components/features/SortSelect'
+
+export const metadata: Metadata = {
+    title: '全サウンド一覧 | AI生成BGM素材',
+    description: 'Zalci Audioの全AI生成BGMコレクション。ゲーム、動画、配信向けの高品質なオーディオ素材を無料でダウンロードできます。RPG、バトル、ホラー、アンビエントなど多彩なジャンル。',
+    alternates: { canonical: '/sounds' },
+}
 
 export const dynamic = 'force-dynamic'
 
