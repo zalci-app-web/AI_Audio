@@ -33,6 +33,7 @@ interface SongCardProps {
         shareClaim: string
         shareAlreadyClaimed: string
         shareCreditReceived: string
+        shareMessage: string
         purchaseModal: any
     }
     user?: any
@@ -159,7 +160,7 @@ export function SongCard({ song, dict, user, isPurchased = false, initialIsFavor
             router.push('/library')
         } catch (error) {
             console.error('Claim error:', error)
-            alert('An error occurred. Please try again.')
+            alert(dict.error)
         } finally {
             setIsLoading(false)
         }
@@ -168,7 +169,7 @@ export function SongCard({ song, dict, user, isPurchased = false, initialIsFavor
     const handleShare = (e: React.MouseEvent) => {
         e.stopPropagation()
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
-        const shareText = `${song.title} - AI生成BGM素材 🎵 #ZalciAudio #フリーBGM`
+        const shareText = `${song.title}${dict.shareMessage}`
         const shareUrl = `${siteUrl}/sounds`
         const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`
         window.open(tweetUrl, '_blank', 'width=600,height=400')

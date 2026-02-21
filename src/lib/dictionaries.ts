@@ -59,6 +59,7 @@ export const dictionaries = {
             shareClaim: 'Claim Free Credit',
             shareAlreadyClaimed: 'Already Claimed This Week',
             shareCreditReceived: '🎉 +1 Free Credit Received!',
+            shareMessage: ' - AI Audio Asset 🎵 #ZalciAudio #FreeBGM',
         },
         sounds: {
             title: 'All Sounds',
@@ -188,7 +189,7 @@ export const dictionaries = {
                 },
                 {
                     title: 'Article 3 (Prohibited Acts)',
-                    content: 'Users shall not engage in the following acts when using the Service.\n\nRedistribution/Resale: Redistributing, reselling, lending, or transferring the Assets themselves, or Assets with only minor processing, as standalone files to third parties (including selling as BGM collections, registering on asset sales sites, etc.).\n\n著作権管理システムへの登録: 素材、または素材を使用した成果物を、YouTube Content ID、JASRAC等の著作権管理団体、またはこれらに類する著作権管理システム・データベースに登録する行為。\n\nUse for AI Learning: Using Assets as training data for generative AI (artificial intelligence), and intentionally generating similar audio using generative AI using the Assets.\n\nUnauthorized Use: Using Assets for purposes contrary to public order and morals, criminal acts, activities related to anti-social forces, or purposes that infringe on the rights of others.\n\nAccount Sharing: Sharing one account with multiple people, or transferring or lending account information to a third party.'
+                    content: 'Users shall not engage in the following acts when using the Service.\n\nRedistribution/Resale: Redistributing, reselling, lending, or transferring the Assets themselves, or Assets with only minor processing, as standalone files to third parties (including selling as BGM collections, registering on asset sales sites, etc.).\n\nRegistration in Copyright Management Systems: Registering the materials, or deliverables using the materials, with copyright management organizations such as YouTube Content ID, JASRAC, or similar copyright management systems and databases.\n\nUse for AI Learning: Using Assets as training data for generative AI (artificial intelligence), and intentionally generating similar audio using generative AI using the Assets.\n\nUnauthorized Use: Using Assets for purposes contrary to public order and morals, criminal acts, activities related to anti-social forces, or purposes that infringe on the rights of others.\n\nAccount Sharing: Sharing one account with multiple people, or transferring or lending account information to a third party.'
                 },
                 {
                     title: 'Article 4 (Returns, Cancellations, and Redownloads)',
@@ -455,6 +456,7 @@ export const dictionaries = {
             shareClaim: '無料枠を受け取る',
             shareAlreadyClaimed: '今週はすでに受け取り済み',
             shareCreditReceived: '🎉 無料枠+1獲得！',
+            shareMessage: ' - AI生成BGM素材 🎵 #ZalciAudio #フリーBGM',
         },
         sounds: {
             title: '全サウンド一覧',
