@@ -13,53 +13,23 @@ export async function POST(req: NextRequest) {
 
         const supabaseAdmin = createAdminClient()
 
-        // Fetch user stats
-        const { data: stats, error: statsError } = await supabaseAdmin
-            .from('user_stats')
-            .select('weekly_share_claimed_at, weekly_free_credits_left')
-            .eq('user_id', user.id)
-            .single()
+        // Atomically claim the weekly share bonus (null = already claimed this week)
+        const { data: creditsLeft, error: claimError } = await supabaseAdmin
+            .rpc('claim_share_credit', { p_user_id: user.id })
 
-        if (statsError && statsError.code !== 'PGRST116') {
-            // PGRST116 = no rows found (first time user)
-            console.error('Stats fetch error:', statsError)
-            return NextResponse.json({ error: 'Failed to fetch user stats' }, { status: 500 })
-        }
-
-        const now = new Date()
-        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-
-        // Check if user already claimed share credit this week
-        if (stats?.weekly_share_claimed_at) {
-            const lastClaimed = new Date(stats.weekly_share_claimed_at)
-            if (lastClaimed > oneWeekAgo) {
-                return NextResponse.json(
-                    { error: 'Already claimed this week', alreadyClaimed: true },
-                    { status: 409 }
-                )
-            }
-        }
-
-        // Grant +1 credit and update claim timestamp
-        const currentCredits = stats?.weekly_free_credits_left ?? 0
-
-        const { error: updateError } = await supabaseAdmin
-            .from('user_stats')
-            .upsert(
-                {
-                    user_id: user.id,
-                    weekly_share_claimed_at: now.toISOString(),
-                    weekly_free_credits_left: currentCredits + 1,
-                },
-                { onConflict: 'user_id' }
-            )
-
-        if (updateError) {
-            console.error('Credit grant error:', updateError)
+        if (claimError) {
+            console.error('Credit grant error:', claimError)
             return NextResponse.json({ error: 'Failed to grant credit' }, { status: 500 })
         }
 
-        return NextResponse.json({ success: true, creditsLeft: currentCredits + 1 })
+        if (creditsLeft === null || creditsLeft === undefined) {
+            return NextResponse.json(
+                { error: 'Already claimed this week', alreadyClaimed: true },
+                { status: 409 }
+            )
+        }
+
+        return NextResponse.json({ success: true, creditsLeft })
 
     } catch (error) {
         console.error('Share claim error:', error)

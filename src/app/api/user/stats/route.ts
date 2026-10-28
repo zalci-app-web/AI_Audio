@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-
-// Calculate badge based on download count
-function calculateBadge(downloadCount: number): string {
-    if (downloadCount >= 50) return 'Legendary Composer'
-    if (downloadCount >= 20) return 'Sound Master'
-    if (downloadCount >= 5) return 'Rising Creator'
-    return 'Novice Creator'
-}
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function GET(req: NextRequest) {
     try {
@@ -59,27 +52,10 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
         }
 
-        // This is an optimistic increment from client. 
-        // Secure way is server-side triggered on actual checkout success/download.
-        const { data: currentStats } = await supabase
-            .from('user_stats')
-            .select('download_count')
-            .eq('user_id', user.id)
-            .single()
-
-        const newCount = (currentStats?.download_count || 0) + 1
-        const newBadge = calculateBadge(newCount)
-
-        const { data, error } = await supabase
-            .from('user_stats')
-            .upsert({
-                user_id: user.id,
-                download_count: newCount,
-                current_badge: newBadge,
-                updated_at: new Date().toISOString()
-            })
-            .select()
-            .single()
+        // Counter and badge are updated atomically in SQL; users cannot write user_stats directly.
+        // NOTE: still client-triggered; ideally increment on the server when a download/claim succeeds.
+        const { data, error } = await createAdminClient()
+            .rpc('increment_download_count', { p_user_id: user.id })
 
         if (error) throw error
 

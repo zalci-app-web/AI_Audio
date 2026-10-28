@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { isAdmin } from '@/lib/admin'
 
 import { stripe } from '@/lib/stripe'
 import { FIXED_SONG_IMAGE_URL } from '@/lib/constants'
@@ -10,9 +11,7 @@ export async function POST(req: NextRequest) {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
 
-        const adminUserId = process.env.ADMIN_USER_ID
-
-        if (!user || (adminUserId && user.id !== adminUserId)) {
+        if (!isAdmin(user)) {
             return NextResponse.json(
                 { error: 'Unauthorized' },
                 { status: 403 }
@@ -103,9 +102,7 @@ export async function DELETE(req: NextRequest) {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
 
-        const adminUserId = process.env.ADMIN_USER_ID
-
-        if (!user || (adminUserId && user.id !== adminUserId)) {
+        if (!isAdmin(user)) {
             return NextResponse.json(
                 { error: 'Unauthorized' },
                 { status: 403 }

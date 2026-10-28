@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { dictionaries } from '@/lib/dictionaries'
@@ -45,16 +46,10 @@ export default async function MyPage() {
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
     if (lastResetAt < oneWeekAgo) {
-        // Reset credits
-        const { data: updatedStats, error: updateError } = await supabase
-            .from('user_stats')
-            .update({
-                weekly_free_credits_left: maxCredits,
-                last_credits_reset_at: new Date().toISOString()
-            })
-            .eq('user_id', user.id)
-            .select()
-            .single();
+        // Reset credits (atomic, service role only: users cannot write user_stats directly)
+        const { data: updatedStats, error: updateError } = await createAdminClient()
+            .rpc('reset_weekly_credits', { p_user_id: user.id, p_max_credits: maxCredits })
+            .maybeSingle();
 
         if (!updateError && updatedStats) {
             stats = updatedStats;

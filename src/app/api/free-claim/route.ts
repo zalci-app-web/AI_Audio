@@ -48,30 +48,21 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: 'Already purchased' }, { status: 200 })
         }
 
-        // Credit Logic: If song is NOT free, check for weekly credits
-        if (song.price > 0) {
-            const { data: stats, error: statsError } = await supabaseAdmin
-                .from('user_stats')
-                .select('weekly_free_credits_left')
-                .eq('user_id', user.id)
-                .single()
+        // Credit Logic: If song is NOT free, atomically consume a weekly credit
+        const usedCredit = song.price > 0
+        if (usedCredit) {
+            const { data: remaining, error: creditError } = await supabaseAdmin
+                .rpc('consume_weekly_credit', { p_user_id: user.id })
 
-            if (statsError || !stats || (stats.weekly_free_credits_left || 0) <= 0) {
+            if (creditError) {
+                console.error('Failed to consume credit:', creditError)
+                return NextResponse.json({ error: 'Failed to use credit' }, { status: 500 })
+            }
+            if (remaining === null || remaining === undefined) {
                 return NextResponse.json(
                     { error: 'No weekly credits left' },
                     { status: 403 }
                 )
-            }
-
-            // Decrement credit
-            const { error: decError } = await supabaseAdmin
-                .from('user_stats')
-                .update({ weekly_free_credits_left: stats.weekly_free_credits_left - 1 })
-                .eq('user_id', user.id)
-
-            if (decError) {
-                console.error('Failed to decrement credits:', decError)
-                return NextResponse.json({ error: 'Failed to use credit' }, { status: 500 })
             }
         }
 
@@ -82,11 +73,21 @@ export async function POST(req: NextRequest) {
                 song_id: songId,
                 amount: 0, // Claimed via credit or campaign
                 currency: 'jpy',
-                stripe_payment_id: song.price > 0 ? 'credit_use_' + new Date().getTime() : 'free_campaign_' + new Date().getTime(),
+                stripe_payment_id: usedCredit ? 'credit_use_' + new Date().getTime() : 'free_campaign_' + new Date().getTime(),
                 status: 'completed'
             })
 
         if (insertError) {
+            // Give the credit back: nothing was granted
+            if (usedCredit) {
+                const { error: refundError } = await supabaseAdmin
+                    .rpc('refund_weekly_credit', { p_user_id: user.id })
+                if (refundError) console.error('Failed to refund credit:', refundError)
+            }
+            // 23505 = unique violation: a concurrent request already granted this song
+            if (insertError.code === '23505') {
+                return NextResponse.json({ message: 'Already purchased' }, { status: 200 })
+            }
             console.error('Free claim insert error:', insertError)
             return NextResponse.json({ error: 'Failed to record purchase' }, { status: 500 })
         }

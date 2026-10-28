@@ -5,15 +5,14 @@ import { DeleteSongButton } from '@/components/admin/DeleteSongButton'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { getDictionary } from '@/lib/i18n'
+import { isAdmin } from '@/lib/admin'
 
 export default async function AdminPage() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     // Check if user is authenticated and is admin
-    const adminUserId = process.env.ADMIN_USER_ID
-
-    if (!user || (adminUserId && user.id !== adminUserId)) {
+    if (!isAdmin(user)) {
         redirect('/')
     }
 
