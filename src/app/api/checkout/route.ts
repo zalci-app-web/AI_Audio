@@ -24,6 +24,18 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: '楽曲IDが指定されていません。' }, { status: 400 })
         }
 
+        // 購入済みなら二重課金を防ぐ
+        const { data: existing } = await supabase
+            .from('purchases')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('song_id', songId)
+            .maybeSingle()
+
+        if (existing) {
+            return NextResponse.json({ error: 'この楽曲は既に購入済みです。' }, { status: 409 })
+        }
+
         // 楽曲情報の取得
         const { data: song, error: songError } = await supabase
             .from('songs')

@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
             .select('id')
             .eq('user_id', user.id)
             .eq('song_id', songId)
-            .single()
+            .maybeSingle()
 
         if (purchaseError || !purchase) {
             return NextResponse.json(

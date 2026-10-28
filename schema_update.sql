@@ -3,7 +3,9 @@ create table if not exists public.purchases (
   id uuid default gen_random_uuid() primary key,
   user_id uuid references auth.users not null,
   song_id uuid references public.songs not null,
-  stripe_session_id text not null,
+  stripe_session_id text,
+  stripe_payment_id text,
+  status text not null default 'completed',
   amount integer not null,
   currency text not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
