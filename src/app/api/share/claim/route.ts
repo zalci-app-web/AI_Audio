@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { verifyShareToken } from '@/lib/share-token'
 
 export async function POST(req: NextRequest) {
     try {
@@ -9,6 +10,16 @@ export async function POST(req: NextRequest) {
 
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
+        // The claim must follow a share started via /api/share/start (and take a realistic time)
+        const body = await req.json().catch(() => ({}))
+        const tokenStatus = verifyShareToken(user.id, body?.token)
+        if (tokenStatus !== 'ok') {
+            return NextResponse.json(
+                { error: 'Share not verified', reason: tokenStatus },
+                { status: 400 }
+            )
         }
 
         const supabaseAdmin = createAdminClient()

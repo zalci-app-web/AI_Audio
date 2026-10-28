@@ -48,6 +48,7 @@ export function SongCard({ song, dict, user, isPurchased = false, initialIsFavor
     const [isFavorited, setIsFavorited] = useState(initialIsFavorited)
     const [isFavoriteLoading, setIsFavoriteLoading] = useState(false)
     const [shareState, setShareState] = useState<'idle' | 'shared' | 'claiming' | 'claimed' | 'already_claimed'>('idle')
+    const shareTokenRef = useRef<string | null>(null)
 
     // Quick inline for client component
     const useRouter = (require('next/navigation').useRouter)
@@ -175,6 +176,14 @@ export function SongCard({ song, dict, user, isPurchased = false, initialIsFavor
         window.open(tweetUrl, '_blank', 'width=600,height=400')
         // Show claim button after share window opens
         setShareState('shared')
+        // Ask the server for a share token (required to claim the credit)
+        shareTokenRef.current = null
+        if (user) {
+            fetch('/api/share/start', { method: 'POST' })
+                .then(r => (r.ok ? r.json() : null))
+                .then(d => { shareTokenRef.current = d?.token ?? null })
+                .catch(() => { shareTokenRef.current = null })
+        }
     }
 
     const handleShareClaim = async (e: React.MouseEvent) => {
@@ -185,9 +194,18 @@ export function SongCard({ song, dict, user, isPurchased = false, initialIsFavor
         }
         setShareState('claiming')
         try {
-            const res = await fetch('/api/share/claim', { method: 'POST' })
+            const res = await fetch('/api/share/claim', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: shareTokenRef.current }),
+            })
             if (res.status === 409) {
                 setShareState('already_claimed')
+                return
+            }
+            if (res.status === 400) {
+                // Share not started or claimed too quickly: let the user try again
+                setShareState('shared')
                 return
             }
             if (!res.ok) throw new Error()
